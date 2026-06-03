@@ -1,24 +1,48 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="TravelEase user dashboard with profile, bookings, saved destinations and wishlist."><title>Dashboard | TravelEase</title><link rel="stylesheet" href="css/style.css"></head><body>
-<div class="loader"><div class="orb"></div></div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Modern TravelEase dashboard with analytics cards, bookings, wishlist, profile settings and activity.">
+  <meta name="theme-color" content="#050814"><meta property="og:type" content="website"><meta property="og:title" content="TravelEase Luxury Travel Platform"><meta property="og:description" content="Premium travel planning, hotels, flights, packages, weather, dashboards and concierge booking."><meta property="og:image" content="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"><link rel="preconnect" href="https://images.unsplash.com"><link rel="preconnect" href="https://cdn.coverr.co">
+  <title>Dashboard | TravelEase</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"TravelEase","url":"https://example.com","description":"Premium luxury travel planning and booking platform","areaServed":"Worldwide"}</script>
+</head>
+<body>
+<div class="progress" id="scrollProgress"></div>
+<div class="page-transition" aria-hidden="true"></div>
+<div class="loader" aria-label="Loading TravelEase"><div class="orb"></div><p>Preparing premium routes…</p></div>
+<div class="particles" aria-hidden="true"></div>
 <nav class="nav glass" aria-label="Primary navigation">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a>
-    <div class="nav-links">
+    <a class="brand magnetic" href="index.html" aria-label="TravelEase home"><span class="brand-mark">✦</span><span>TravelEase</span></a>
+    <button class="icon-btn hamburger" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+    <div class="nav-links" id="primaryMenu">
       <a href="index.html">Home</a><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a><a href="blog.html">Blog</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="dashboard.html">Dashboard</a>
     </div>
-    <div class="nav-actions"><button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button><a class="btn" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a><button class="icon-btn hamburger" aria-label="Open menu">☰</button></div>
+    <div class="nav-actions">
+      <select id="currencySwitch" class="mini-select" aria-label="Currency"><option>USD</option><option>EUR</option><option>GBP</option><option>AED</option></select>
+      <select id="languageSwitch" class="mini-select" aria-label="Language"><option>EN</option><option>FR</option><option>AR</option><option>JP</option></select>
+      <button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button>
+      <a class="btn ghost" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a>
+    </div>
   </div>
 </nav>
-<main class="section" style="padding-top:150px"><div class="container dashboard"><aside class="side glass"><div class="avatar">TE</div><h2>Avery Stone</h2><p class="meta">Signature member · New York</p><a class="btn full" href="destinations.html">Add destination</a></aside><section class="grid"><div class="card glass"><span class="eyebrow">Profile</span><h1 class="section-title" style="font-size:2.6rem">Good evening, Avery.</h1><p class="lead">Your concierge is monitoring two trips, three hotel upgrades and a saved island shortlist.</p></div><div class="card glass"><h2>Booking history</h2><table class="table"><tr><th>Trip</th><th>Date</th><th>Status</th></tr><tr><td>Maldives Nocturne</td><td>Aug 18, 2026</td><td>Confirmed</td></tr><tr><td>Velvet Kyoto</td><td>Nov 04, 2026</td><td>Designing</td></tr></table></div><div class="grid grid-3"><article class="card glass"><h3>Saved destinations</h3><p class="meta">6 handpicked ideas</p></article><article class="card glass"><h3>Wishlist</h3><div id="wishlist" class="pill-row"></div></article><article class="card glass"><h3>Currency converter</h3><div id="currencyConverter"><input id="usd" class="input" type="number" placeholder="USD"><input id="eur" class="input" readonly placeholder="EUR"><input id="jpy" class="input" readonly placeholder="JPY"></div></article></div></section></div></main>
+<main class="page-shell"><section class="container page-hero"><span class="eyebrow">Member dashboard</span><h1>Command center for trips, saves, bookings and profile settings.</h1><p class="lead">Real localStorage-backed activity powers bookings, wishlist, recently viewed destinations and notifications.</p></section><section class="container dashboard"><aside class="glass side-panel"><div class="avatar">AS</div><h2>Avery Stone</h2><p class="muted">Platinum traveler · 42 countries</p><button class="btn full">Edit profile</button></aside><div class="dash-main"><div class="stats dash-stats"><div class="stat glass"><strong>$42k</strong><span>Trip value</span></div><div class="stat glass"><strong>7</strong><span>Upcoming</span></div><div class="stat glass"><strong id="wishCount">0</strong><span>Wishlist</span></div><div class="stat glass"><strong>98%</strong><span>Satisfaction</span></div></div><div class="glass chart-card"><h2>Travel analytics</h2><div class="bar-chart"><span style="--h:62%"></span><span style="--h:84%"></span><span style="--h:45%"></span><span style="--h:90%"></span><span style="--h:70%"></span></div></div><section class="grid grid-2"><div class="glass card"><h2>Upcoming trips</h2><div id="dashboardTrips"></div></div><div class="glass card"><h2>Wishlist management</h2><div id="wishlistGrid"></div></div><div class="glass card"><h2>Booking history</h2><div id="bookingHistory"></div></div><div class="glass card"><h2>Notifications</h2><ul class="activity"><li>Weather improved in Kyoto for your saved route.</li><li>Qatar Airways released business saver inventory.</li><li>Your concierge quote is ready for review.</li></ul></div></section></div></section></main>
 <footer class="footer">
   <div class="container footer-grid">
-    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="meta">A premium travel operating system for discerning explorers, founders and design-led families.</p></div>
-    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Tour Packages</a><a href="hotels.html">Hotels</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a></div>
-    <div><strong>Company</strong><a href="about.html">About Us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a></div>
-    <div><strong>Members</strong><a href="login.html">Login</a><a href="register.html">Register</a><a href="dashboard.html">Dashboard</a></div>
-  </div><div class="container"><p class="meta">© 2026 TravelEase. Crafted with glass, gradients and concierge-grade care.</p></div>
+    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="muted">A luxury travel intelligence platform blending human concierge service, live data, and cinematic discovery.</p><div class="socials"><a aria-label="Instagram" href="#">◎</a><a aria-label="X" href="#">𝕏</a><a aria-label="LinkedIn" href="#">in</a></div></div>
+    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a></div>
+    <div><strong>Company</strong><a href="about.html">About us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a><a href="dashboard.html">Members</a></div>
+    <div><strong>Trust</strong><a href="#">Verified reviews</a><a href="#">Travel protection</a><a href="#">Partner network</a><a href="#">Privacy</a></div>
+  </div>
+  <div class="container subfooter"><span>© 2026 TravelEase. Built for premium explorers.</span><span>Structured data · lazy media · accessible controls</span></div>
 </footer>
+<button class="whatsapp" aria-label="Chat with TravelEase concierge">✆</button>
 <button class="icon-btn back-top" aria-label="Back to top">↑</button>
-<div class="modal" id="detailModal"><div class="modal-box glass" id="modalContent"></div></div>
-<script src="js/app.js"></script>
-</body></html>
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-label="Travel detail"><div class="modal-box glass" id="modalContent"></div></div>
+<div id="toastRegion" class="toast-region" aria-live="polite"></div>
+<script src="js/app.js" defer></script>
+</body>
+</html>
