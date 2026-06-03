@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Reserve a premium TravelEase journey with traveler details, trip preferences, concierge options and a live booking summary."><title>Booking | TravelEase</title><link rel="stylesheet" href="css/style.css"></head><body>
+<div class="loader"><div class="orb"></div></div>
+<nav class="nav glass" aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a><a href="blog.html">Blog</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="dashboard.html">Dashboard</a>
+    </div>
+    <div class="nav-actions"><button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button><a class="btn" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a><button class="icon-btn hamburger" aria-label="Open menu">☰</button></div>
+  </div>
+</nav>
+<main class="section" style="padding-top:150px">
+  <div class="container split booking-hero">
+    <div>
+      <span class="eyebrow">Reserve your journey</span>
+      <h1 class="section-title">A concierge-grade booking flow for effortless escapes.</h1>
+      <p class="lead">Choose your trip, travel dates, guest count and elevated extras. Your selections update the estimate instantly and move securely into checkout.</p>
+      <div class="pill-row"><span class="chip">Secure hold</span><span class="chip">Flexible dates</span><span class="chip">Human concierge review</span></div>
+    </div>
+    <aside class="card glass booking-summary" aria-label="Booking estimate summary">
+      <span class="eyebrow">Live estimate</span>
+      <h2 id="bookingTripName">Maldives Nocturne</h2>
+      <p class="meta" id="bookingTripMeta">7 nights · private transfers · island concierge</p>
+      <div class="summary-row"><span>Trip base</span><strong id="summaryBase">$6,200</strong></div>
+      <div class="summary-row"><span>Travelers</span><strong id="summaryTravelers">2</strong></div>
+      <div class="summary-row"><span>Extras</span><strong id="summaryExtras">$650</strong></div>
+      <div class="summary-total"><span>Estimated total</span><strong id="summaryTotal">$13,050</strong></div>
+      <a class="btn primary full" href="checkout.html" id="bookingCheckoutLink">Continue to checkout</a>
+    </aside>
+  </div>
+  <section class="container section compact">
+    <form id="bookingForm" class="form-card glass booking-grid">
+      <div class="field"><label>Trip style</label><select id="bookingTrip" required><option value="Maldives Nocturne" data-price="6200" data-meta="7 nights · private transfers · island concierge">Maldives Nocturne</option><option value="Velvet Kyoto" data-price="2850" data-meta="6 nights · ryokan spa · cultural host">Velvet Kyoto</option><option value="Patagonia Pulse" data-price="5400" data-meta="9 nights · glacier lodge · heli transfers">Patagonia Pulse</option><option value="Sahara Astral Camp" data-price="4100" data-meta="5 nights · desert suite · astronomer guide">Sahara Astral Camp</option></select></div>
+      <div class="field"><label>Departure</label><input id="bookingDate" class="input" type="date" required></div>
+      <div class="field"><label>Travelers</label><input id="bookingTravelers" class="input" type="number" min="1" max="12" value="2" required></div>
+      <div class="field"><label>Cabin preference</label><select id="bookingCabin"><option value="0">Commercial business</option><option value="950">First class upgrade +$950</option><option value="4200">Private aviation consult +$4,200</option></select></div>
+      <div class="field"><label>Guest name</label><input id="bookingName" class="input" required placeholder="Full name"></div>
+      <div class="field"><label>Email</label><input id="bookingEmail" class="input" required type="email" placeholder="you@example.com"></div>
+      <div class="field"><label>Phone</label><input id="bookingPhone" class="input" required placeholder="+1 555 0100"></div>
+      <div class="field"><label>Concierge extras</label><select id="bookingExtras"><option value="650">Airport fast track + spa arrival · $650</option><option value="1200">Private dining + cultural access · $1,200</option><option value="2200">VIP celebration design · $2,200</option></select></div>
+      <div class="field booking-notes"><label>Special requests</label><textarea id="bookingNotes" placeholder="Dietary needs, celebration details, preferred pace, accessibility notes"></textarea></div>
+      <div class="booking-actions"><button class="btn primary" type="submit">Save booking and checkout</button><p class="notice"></p></div>
+    </form>
+  </section>
+</main>
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="meta">A premium travel operating system for discerning explorers, founders and design-led families.</p></div>
+    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Tour Packages</a><a href="hotels.html">Hotels</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a></div>
+    <div><strong>Company</strong><a href="about.html">About Us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a></div>
+    <div><strong>Members</strong><a href="login.html">Login</a><a href="register.html">Register</a><a href="dashboard.html">Dashboard</a></div>
+  </div><div class="container"><p class="meta">© 2026 TravelEase. Crafted with glass, gradients and concierge-grade care.</p></div>
+</footer>
+<button class="icon-btn back-top" aria-label="Back to top">↑</button>
+<div class="modal" id="detailModal"><div class="modal-box glass" id="modalContent"></div></div>
+<script src="js/app.js"></script>
+</body></html>
