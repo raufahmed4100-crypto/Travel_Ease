@@ -1,24 +1,48 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Modern luxury flight search and booking interface."><title>Flights | TravelEase</title><link rel="stylesheet" href="css/style.css"></head><body>
-<div class="loader"><div class="orb"></div></div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Premium flight search UI with airline filters, route selectors, comparison cards and booking workflow.">
+  <meta name="theme-color" content="#050814"><meta property="og:type" content="website"><meta property="og:title" content="TravelEase Luxury Travel Platform"><meta property="og:description" content="Premium travel planning, hotels, flights, packages, weather, dashboards and concierge booking."><meta property="og:image" content="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"><link rel="preconnect" href="https://images.unsplash.com"><link rel="preconnect" href="https://cdn.coverr.co">
+  <title>Flights | TravelEase</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"TravelEase","url":"https://example.com","description":"Premium luxury travel planning and booking platform","areaServed":"Worldwide"}</script>
+</head>
+<body>
+<div class="progress" id="scrollProgress"></div>
+<div class="page-transition" aria-hidden="true"></div>
+<div class="loader" aria-label="Loading TravelEase"><div class="orb"></div><p>Preparing premium routes…</p></div>
+<div class="particles" aria-hidden="true"></div>
 <nav class="nav glass" aria-label="Primary navigation">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a>
-    <div class="nav-links">
+    <a class="brand magnetic" href="index.html" aria-label="TravelEase home"><span class="brand-mark">✦</span><span>TravelEase</span></a>
+    <button class="icon-btn hamburger" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+    <div class="nav-links" id="primaryMenu">
       <a href="index.html">Home</a><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a><a href="blog.html">Blog</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="dashboard.html">Dashboard</a>
     </div>
-    <div class="nav-actions"><button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button><a class="btn" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a><button class="icon-btn hamburger" aria-label="Open menu">☰</button></div>
+    <div class="nav-actions">
+      <select id="currencySwitch" class="mini-select" aria-label="Currency"><option>USD</option><option>EUR</option><option>GBP</option><option>AED</option></select>
+      <select id="languageSwitch" class="mini-select" aria-label="Language"><option>EN</option><option>FR</option><option>AR</option><option>JP</option></select>
+      <button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button>
+      <a class="btn ghost" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a>
+    </div>
   </div>
 </nav>
-<main class="section" style="padding-top:150px"><div class="container"><span class="eyebrow">Flights</span><h1 class="section-title">Book flights by comfort, not just price.</h1><form class="form-card glass" data-validate><div class="search-panel"><div class="field"><label>From</label><input class="input" required placeholder="New York"></div><div class="field"><label>To</label><input class="input" required placeholder="Tokyo"></div><div class="field"><label>Date</label><input class="input" required type="date"></div><button class="btn primary">Search cabins</button></div><p class="notice"></p></form><section class="section compact grid grid-3"><article class="card glass"><span class="chip">Best rest</span><h3>NYC → Tokyo</h3><p class="meta">Business suite · 14h 05m · lounge access</p><p class="price">$3,840</p><a class="btn primary" href="booking.html">Reserve seat</a></article><article class="card glass"><span class="chip">Fastest</span><h3>London → Dubai</h3><p class="meta">First cabin · 6h 55m · chauffeur transfer</p><p class="price">$2,910</p><a class="btn primary" href="booking.html">Reserve seat</a></article><article class="card glass"><span class="chip">Lowest fatigue</span><h3>LA → Paris</h3><p class="meta">Premium economy · circadian departure</p><p class="price">$1,420</p><a class="btn primary" href="booking.html">Reserve seat</a></article></section></div></main>
+<main class="page-shell"><section class="container page-hero"><span class="eyebrow">Flights</span><h1>Premium flight comparison with route comfort signals.</h1><p class="lead">Search routes, compare cabin comfort, airline reputation, layovers and concierge upgrade suggestions.</p></section><section class="container form-card glass"><form id="flightSearch" class="form-grid"><label>From<input class="input" id="fromAirport" required placeholder="New York JFK"></label><label>To<input class="input" id="toAirport" required placeholder="Tokyo HND"></label><label>Depart<input class="input" type="date" required></label><label>Cabin<select id="flightCabin"><option>Business</option><option>First</option><option>Premium economy</option></select></label><button class="btn primary">Compare flights</button></form></section><section class="container toolbar glass"><input id="searchInput" class="input" placeholder="Filter airline or route"><select id="categoryFilter"><option value="all">All airlines</option><option>Emirates</option><option>Qatar Airways</option><option>Singapore Airlines</option><option>Delta One</option></select></section><section class="container grid grid-3" id="flightGrid"></section></main>
 <footer class="footer">
   <div class="container footer-grid">
-    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="meta">A premium travel operating system for discerning explorers, founders and design-led families.</p></div>
-    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Tour Packages</a><a href="hotels.html">Hotels</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a></div>
-    <div><strong>Company</strong><a href="about.html">About Us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a></div>
-    <div><strong>Members</strong><a href="login.html">Login</a><a href="register.html">Register</a><a href="dashboard.html">Dashboard</a></div>
-  </div><div class="container"><p class="meta">© 2026 TravelEase. Crafted with glass, gradients and concierge-grade care.</p></div>
+    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="muted">A luxury travel intelligence platform blending human concierge service, live data, and cinematic discovery.</p><div class="socials"><a aria-label="Instagram" href="#">◎</a><a aria-label="X" href="#">𝕏</a><a aria-label="LinkedIn" href="#">in</a></div></div>
+    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a></div>
+    <div><strong>Company</strong><a href="about.html">About us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a><a href="dashboard.html">Members</a></div>
+    <div><strong>Trust</strong><a href="#">Verified reviews</a><a href="#">Travel protection</a><a href="#">Partner network</a><a href="#">Privacy</a></div>
+  </div>
+  <div class="container subfooter"><span>© 2026 TravelEase. Built for premium explorers.</span><span>Structured data · lazy media · accessible controls</span></div>
 </footer>
+<button class="whatsapp" aria-label="Chat with TravelEase concierge">✆</button>
 <button class="icon-btn back-top" aria-label="Back to top">↑</button>
-<div class="modal" id="detailModal"><div class="modal-box glass" id="modalContent"></div></div>
-<script src="js/app.js"></script>
-</body></html>
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-label="Travel detail"><div class="modal-box glass" id="modalContent"></div></div>
+<div id="toastRegion" class="toast-region" aria-live="polite"></div>
+<script src="js/app.js" defer></script>
+</body>
+</html>
