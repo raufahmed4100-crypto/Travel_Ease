@@ -1,24 +1,48 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Create a TravelEase member account for premium travel planning."><title>Register | TravelEase</title><link rel="stylesheet" href="css/style.css"></head><body>
-<div class="loader"><div class="orb"></div></div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Modern TravelEase register page with social login and password strength meter.">
+  <meta name="theme-color" content="#050814"><meta property="og:type" content="website"><meta property="og:title" content="TravelEase Luxury Travel Platform"><meta property="og:description" content="Premium travel planning, hotels, flights, packages, weather, dashboards and concierge booking."><meta property="og:image" content="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"><link rel="preconnect" href="https://images.unsplash.com"><link rel="preconnect" href="https://cdn.coverr.co">
+  <title>Register | TravelEase</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"TravelEase","url":"https://example.com","description":"Premium luxury travel planning and booking platform","areaServed":"Worldwide"}</script>
+</head>
+<body>
+<div class="progress" id="scrollProgress"></div>
+<div class="page-transition" aria-hidden="true"></div>
+<div class="loader" aria-label="Loading TravelEase"><div class="orb"></div><p>Preparing premium routes…</p></div>
+<div class="particles" aria-hidden="true"></div>
 <nav class="nav glass" aria-label="Primary navigation">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a>
-    <div class="nav-links">
+    <a class="brand magnetic" href="index.html" aria-label="TravelEase home"><span class="brand-mark">✦</span><span>TravelEase</span></a>
+    <button class="icon-btn hamburger" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+    <div class="nav-links" id="primaryMenu">
       <a href="index.html">Home</a><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a><a href="blog.html">Blog</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="dashboard.html">Dashboard</a>
     </div>
-    <div class="nav-actions"><button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button><a class="btn" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a><button class="icon-btn hamburger" aria-label="Open menu">☰</button></div>
+    <div class="nav-actions">
+      <select id="currencySwitch" class="mini-select" aria-label="Currency"><option>USD</option><option>EUR</option><option>GBP</option><option>AED</option></select>
+      <select id="languageSwitch" class="mini-select" aria-label="Language"><option>EN</option><option>FR</option><option>AR</option><option>JP</option></select>
+      <button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button>
+      <a class="btn ghost" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a>
+    </div>
   </div>
 </nav>
-<main class="auth"><form class="form-card glass" data-validate style="width:min(520px,100%)"><span class="eyebrow">Create account</span><h1 class="section-title" style="font-size:3rem">Join the private layer of travel.</h1><div class="field"><label>Full name</label><input class="input" required placeholder="Your name"></div><div class="field"><label>Email</label><input class="input" required type="email" placeholder="you@example.com"></div><div class="field"><label>Password</label><input class="input" required type="password" minlength="6" placeholder="Minimum 6 characters"></div><button class="btn primary full">Create account</button><p class="notice"></p></form></main>
+<main class="auth-page"><section class="auth-card glass reveal"><span class="eyebrow">Join TravelEase</span><h1>Create your luxury travel profile.</h1><form id="registerForm" data-validate><label>Name<input class="input" required placeholder="Avery Stone"></label><label>Email<input class="input" type="email" required placeholder="you@example.com"></label><label>Password<input id="passwordInput" class="input" type="password" required placeholder="Create password"></label><div class="strength"><span id="strengthBar"></span></div><button class="btn primary full">Register</button><p class="notice"></p></form><div class="social-login"><button class="btn">Sign up with Google</button><button class="btn">Sign up with Apple</button></div><p class="muted">Already a member? <a href="login.html">Login</a></p></section></main>
 <footer class="footer">
   <div class="container footer-grid">
-    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="meta">A premium travel operating system for discerning explorers, founders and design-led families.</p></div>
-    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Tour Packages</a><a href="hotels.html">Hotels</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a></div>
-    <div><strong>Company</strong><a href="about.html">About Us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a></div>
-    <div><strong>Members</strong><a href="login.html">Login</a><a href="register.html">Register</a><a href="dashboard.html">Dashboard</a></div>
-  </div><div class="container"><p class="meta">© 2026 TravelEase. Crafted with glass, gradients and concierge-grade care.</p></div>
+    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="muted">A luxury travel intelligence platform blending human concierge service, live data, and cinematic discovery.</p><div class="socials"><a aria-label="Instagram" href="#">◎</a><a aria-label="X" href="#">𝕏</a><a aria-label="LinkedIn" href="#">in</a></div></div>
+    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a></div>
+    <div><strong>Company</strong><a href="about.html">About us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a><a href="dashboard.html">Members</a></div>
+    <div><strong>Trust</strong><a href="#">Verified reviews</a><a href="#">Travel protection</a><a href="#">Partner network</a><a href="#">Privacy</a></div>
+  </div>
+  <div class="container subfooter"><span>© 2026 TravelEase. Built for premium explorers.</span><span>Structured data · lazy media · accessible controls</span></div>
 </footer>
+<button class="whatsapp" aria-label="Chat with TravelEase concierge">✆</button>
 <button class="icon-btn back-top" aria-label="Back to top">↑</button>
-<div class="modal" id="detailModal"><div class="modal-box glass" id="modalContent"></div></div>
-<script src="js/app.js"></script>
-</body></html>
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-label="Travel detail"><div class="modal-box glass" id="modalContent"></div></div>
+<div id="toastRegion" class="toast-region" aria-live="polite"></div>
+<script src="js/app.js" defer></script>
+</body>
+</html>
