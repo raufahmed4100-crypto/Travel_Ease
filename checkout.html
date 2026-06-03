@@ -1,59 +1,48 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Complete a TravelEase booking with a premium checkout, payment details, billing information and final order summary."><title>Checkout | TravelEase</title><link rel="stylesheet" href="css/style.css"></head><body>
-<div class="loader"><div class="orb"></div></div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Premium checkout UI with order summary, billing, multiple payment methods, validation and confirmation modal.">
+  <meta name="theme-color" content="#050814"><meta property="og:type" content="website"><meta property="og:title" content="TravelEase Luxury Travel Platform"><meta property="og:description" content="Premium travel planning, hotels, flights, packages, weather, dashboards and concierge booking."><meta property="og:image" content="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"><link rel="preconnect" href="https://images.unsplash.com"><link rel="preconnect" href="https://cdn.coverr.co">
+  <title>Checkout | TravelEase</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"TravelEase","url":"https://example.com","description":"Premium luxury travel planning and booking platform","areaServed":"Worldwide"}</script>
+</head>
+<body>
+<div class="progress" id="scrollProgress"></div>
+<div class="page-transition" aria-hidden="true"></div>
+<div class="loader" aria-label="Loading TravelEase"><div class="orb"></div><p>Preparing premium routes…</p></div>
+<div class="particles" aria-hidden="true"></div>
 <nav class="nav glass" aria-label="Primary navigation">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a>
-    <div class="nav-links">
+    <a class="brand magnetic" href="index.html" aria-label="TravelEase home"><span class="brand-mark">✦</span><span>TravelEase</span></a>
+    <button class="icon-btn hamburger" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+    <div class="nav-links" id="primaryMenu">
       <a href="index.html">Home</a><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a><a href="blog.html">Blog</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="dashboard.html">Dashboard</a>
     </div>
-    <div class="nav-actions"><button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button><a class="btn" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a><button class="icon-btn hamburger" aria-label="Open menu">☰</button></div>
+    <div class="nav-actions">
+      <select id="currencySwitch" class="mini-select" aria-label="Currency"><option>USD</option><option>EUR</option><option>GBP</option><option>AED</option></select>
+      <select id="languageSwitch" class="mini-select" aria-label="Language"><option>EN</option><option>FR</option><option>AR</option><option>JP</option></select>
+      <button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button>
+      <a class="btn ghost" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a>
+    </div>
   </div>
 </nav>
-<main class="section" style="padding-top:150px">
-  <div class="container checkout-layout">
-    <section>
-      <span class="eyebrow">Secure checkout</span>
-      <h1 class="section-title">Confirm your TravelEase escape.</h1>
-      <p class="lead">Review the concierge hold, add billing details and submit a secure demo checkout. A travel designer follows up before any real charge.</p>
-      <form id="checkoutForm" class="form-card glass checkout-form">
-        <h2>Contact & billing</h2>
-        <div class="booking-grid slim">
-          <div class="field"><label>Cardholder</label><input class="input" required placeholder="Avery Stone"></div>
-          <div class="field"><label>Email</label><input id="checkoutEmail" class="input" required type="email" placeholder="you@example.com"></div>
-          <div class="field"><label>Card number</label><input class="input" required inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242"></div>
-          <div class="field"><label>Expiry</label><input class="input" required placeholder="MM / YY"></div>
-          <div class="field"><label>CVC</label><input class="input" required inputmode="numeric" maxlength="4" placeholder="123"></div>
-          <div class="field"><label>Country</label><select required><option>United States</option><option>United Kingdom</option><option>United Arab Emirates</option><option>Singapore</option></select></div>
-        </div>
-        <label class="checkline"><input type="checkbox" required> I understand this demo places a concierge hold only.</label>
-        <button class="btn primary full" type="submit">Complete secure checkout</button>
-        <p class="notice"></p>
-      </form>
-    </section>
-    <aside class="card glass checkout-card">
-      <span class="eyebrow">Order summary</span>
-      <h2 id="checkoutTripName">Maldives Nocturne</h2>
-      <p class="meta" id="checkoutMeta">7 nights · private transfers · island concierge</p>
-      <div class="summary-row"><span>Guest</span><strong id="checkoutGuest">Guest traveler</strong></div>
-      <div class="summary-row"><span>Departure</span><strong id="checkoutDate">Flexible</strong></div>
-      <div class="summary-row"><span>Travelers</span><strong id="checkoutTravelers">2</strong></div>
-      <div class="summary-row"><span>Subtotal</span><strong id="checkoutSubtotal">$12,400</strong></div>
-      <div class="summary-row"><span>Concierge extras</span><strong id="checkoutExtras">$650</strong></div>
-      <div class="summary-row"><span>Service hold</span><strong id="checkoutService">$392</strong></div>
-      <div class="summary-total"><span>Total due today</span><strong id="checkoutTotal">$13,442</strong></div>
-      <a class="btn full" href="booking.html">Edit booking</a>
-    </aside>
-  </div>
-</main>
+<main class="page-shell"><section class="container page-hero"><span class="eyebrow">Checkout</span><h1>Secure premium checkout with progress indicators.</h1><p class="lead">Review your order, enter billing details, select a payment method and receive a polished confirmation screen.</p></section><section class="container checkout-layout"><form id="checkoutForm" class="form-card glass"><div class="steps"><span class="checkout-step active">1 Billing</span><span class="checkout-step">2 Payment</span><span class="checkout-step">3 Confirm</span></div><div class="checkout-panel active"><h2>Billing details</h2><div class="form-grid"><label>Full name<input class="input" required placeholder="Avery Stone"></label><label>Email<input id="checkoutEmail" class="input" type="email" required></label><label>Address<input class="input" required placeholder="1 Luxury Lane"></label><label>Country<select required><option>United States</option><option>United Kingdom</option><option>United Arab Emirates</option><option>Singapore</option></select></label></div></div><div class="checkout-panel"><h2>Payment method</h2><div class="payment-methods"><label><input name="pay" type="radio" checked> Visa ending demo</label><label><input name="pay" type="radio"> PayPal concierge</label><label><input name="pay" type="radio"> Wire transfer</label></div><div class="form-grid"><label>Card number<input class="input" required inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242"></label><label>Expiry<input class="input" required placeholder="MM / YY"></label><label>CVC<input class="input" required inputmode="numeric" maxlength="4" placeholder="123"></label></div></div><div class="checkout-panel"><h2>Final confirmation</h2><label class="checkline"><input type="checkbox" required> I approve the demo concierge hold and itinerary review.</label><p class="muted">No real payment is processed. This production-ready UI demonstrates validation, state and success handling.</p></div><div class="wizard-actions"><button type="button" class="btn" id="prevCheckout">Back</button><button type="button" class="btn primary" id="nextCheckout">Continue</button><button class="btn primary hidden" id="completeCheckout" type="submit">Complete secure checkout</button></div><p class="notice"></p></form><aside class="card glass checkout-card"><span class="eyebrow">Order summary</span><h2 id="checkoutTripName">Maldives Nocturne</h2><p class="muted" id="checkoutMeta">7 nights · private transfers</p><div class="summary-row"><span>Guest</span><strong id="checkoutGuest">Guest</strong></div><div class="summary-row"><span>Departure</span><strong id="checkoutDate">Flexible</strong></div><div class="summary-row"><span>Travelers</span><strong id="checkoutTravelers">2</strong></div><div class="summary-row"><span>Subtotal</span><strong id="checkoutSubtotal">$0</strong></div><div class="summary-row"><span>Taxes/fees</span><strong id="checkoutService">$0</strong></div><div class="summary-total"><span>Total due</span><strong id="checkoutTotal">$0</strong></div><a class="btn full" href="booking.html">Edit booking</a></aside></section><div id="successModal" class="success-modal glass" role="dialog" aria-modal="true"><h2>Journey confirmed ✦</h2><p>Your TravelEase designer will send a refined itinerary and flight options shortly.</p><a class="btn primary" href="dashboard.html">View dashboard</a></div></main>
 <footer class="footer">
   <div class="container footer-grid">
-    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="meta">A premium travel operating system for discerning explorers, founders and design-led families.</p></div>
-    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Tour Packages</a><a href="hotels.html">Hotels</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a></div>
-    <div><strong>Company</strong><a href="about.html">About Us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a></div>
-    <div><strong>Members</strong><a href="login.html">Login</a><a href="register.html">Register</a><a href="dashboard.html">Dashboard</a></div>
-  </div><div class="container"><p class="meta">© 2026 TravelEase. Crafted with glass, gradients and concierge-grade care.</p></div>
+    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="muted">A luxury travel intelligence platform blending human concierge service, live data, and cinematic discovery.</p><div class="socials"><a aria-label="Instagram" href="#">◎</a><a aria-label="X" href="#">𝕏</a><a aria-label="LinkedIn" href="#">in</a></div></div>
+    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a></div>
+    <div><strong>Company</strong><a href="about.html">About us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a><a href="dashboard.html">Members</a></div>
+    <div><strong>Trust</strong><a href="#">Verified reviews</a><a href="#">Travel protection</a><a href="#">Partner network</a><a href="#">Privacy</a></div>
+  </div>
+  <div class="container subfooter"><span>© 2026 TravelEase. Built for premium explorers.</span><span>Structured data · lazy media · accessible controls</span></div>
 </footer>
+<button class="whatsapp" aria-label="Chat with TravelEase concierge">✆</button>
 <button class="icon-btn back-top" aria-label="Back to top">↑</button>
-<div class="modal" id="detailModal"><div class="modal-box glass" id="modalContent"></div></div>
-<script src="js/app.js"></script>
-</body></html>
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-label="Travel detail"><div class="modal-box glass" id="modalContent"></div></div>
+<div id="toastRegion" class="toast-region" aria-live="polite"></div>
+<script src="js/app.js" defer></script>
+</body>
+</html>
