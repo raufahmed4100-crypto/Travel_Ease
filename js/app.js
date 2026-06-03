@@ -1,173 +1,119 @@
-/* TravelEase shared interactions: filters, modals, storage, counters and UI polish. */
-const $ = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+/* TravelEase app: realistic data, rendering, localStorage state, weather API, booking and checkout logic. */
+const $ = (selector, scope = document) => scope.querySelector(selector);
+const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+const store = {
+  get(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } },
+  set(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+};
+const money = value => new Intl.NumberFormat('en-US', { style: 'currency', currency: store.get('te-currency', 'USD'), maximumFractionDigits: 0 }).format(Number(value || 0));
 
 const destinations = [
-  { name: 'Aurora Fjords', region: 'Europe', mood: 'nature', price: '$3,200', img: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80', desc: 'Private glass-cabin cruises, chef-led Nordic tastings and midnight-sun photography routes.' },
-  { name: 'Velvet Kyoto', region: 'Asia', mood: 'culture', price: '$2,850', img: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=80', desc: 'A refined journey through hidden tea houses, ryokan spas and lantern-lit garden dinners.' },
-  { name: 'Sahara Astral Camp', region: 'Africa', mood: 'adventure', price: '$4,100', img: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=900&q=80', desc: 'Ultra-luxury desert suites, astronomer-guided stargazing and silent dune expeditions.' },
-  { name: 'Amalfi Afterglow', region: 'Europe', mood: 'romance', price: '$3,750', img: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=900&q=80', desc: 'Cliffside villas, vintage speedboats, lemon grove lunches and private coastal concerts.' },
-  { name: 'Patagonia Pulse', region: 'Americas', mood: 'adventure', price: '$5,400', img: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80', desc: 'Guided glacier treks, lodge-to-lodge heli transfers and restorative thermal rituals.' },
-  { name: 'Maldives Nocturne', region: 'Islands', mood: 'romance', price: '$6,200', img: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=900&q=80', desc: 'Overwater sanctuaries, coral conservation dives and moonlit floating degustations.' }
+  { id:'maldives', title:'Maldives Nocturne', country:'Maldives', region:'Island', mood:'Romantic', price:6200, rating:4.96, reviews:842, lat:3.2028, lon:73.2207, image:'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=1000&q=80', detail:'Overwater villas, reef restoration dives, moonlit dining and seaplane transfers curated for privacy.' },
+  { id:'kyoto', title:'Velvet Kyoto', country:'Japan', region:'Asia', mood:'Cultural', price:3200, rating:4.92, reviews:671, lat:35.0116, lon:135.7681, image:'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1000&q=80', detail:'Ryokan spa stays, temple access, tea masters, chef-led market walks and lantern-lit lanes.' },
+  { id:'iceland', title:'Iceland Aurora Circuit', country:'Iceland', region:'Europe', mood:'Adventure', price:4800, rating:4.89, reviews:522, lat:64.1466, lon:-21.9426, image:'https://images.unsplash.com/photo-1504829857797-ddff29c27927?auto=format&fit=crop&w=1000&q=80', detail:'Northern lights lodges, glacier guides, geothermal lagoons and private super-jeep routes.' },
+  { id:'morocco', title:'Sahara Astral Camp', country:'Morocco', region:'Africa', mood:'Luxury', price:3900, rating:4.87, reviews:438, lat:31.6295, lon:-7.9811, image:'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1000&q=80', detail:'Desert suites, astronomer-hosted dinners, Marrakech design tours and Atlas mountain retreats.' },
+  { id:'amalfi', title:'Amalfi Riva Escape', country:'Italy', region:'Europe', mood:'Romantic', price:5400, rating:4.94, reviews:615, lat:40.6333, lon:14.6029, image:'https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?auto=format&fit=crop&w=1000&q=80', detail:'Private Riva boat days, cliffside suites, lemon-grove dining and Capri after-hours access.' },
+  { id:'patagonia', title:'Patagonia Pulse', country:'Chile', region:'Americas', mood:'Adventure', price:5800, rating:4.91, reviews:354, lat:-51.2538, lon:-72.394, image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1000&q=80', detail:'Glacier lodges, heli-transfer options, expert guides and dramatic trekking with premium recovery.' }
 ];
 const packages = [
-  { name: 'Neo Honeymoon', cat: 'romance', days: '7 nights', price: '$4,950', img: destinations[5].img },
-  { name: 'Founder Reset', cat: 'wellness', days: '5 nights', price: '$3,400', img: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=900&q=80' },
-  { name: 'Arctic Signal', cat: 'adventure', days: '9 nights', price: '$7,800', img: destinations[0].img },
-  { name: 'Cultural Blackbook', cat: 'culture', days: '10 nights', price: '$5,150', img: destinations[1].img }
+  { id:'pkg-maldives', title:'Maldives Private Blue Week', cat:'Romantic', price:12800, rating:4.97, reviews:312, image:destinations[0].image, detail:'7 nights, overwater suite, seaplane, reef guide, spa arrival and private sandbank dinner.', discount:'12% seasonal value' },
+  { id:'pkg-japan', title:'Japan Craft & Cuisine', cat:'Cultural', price:9400, rating:4.93, reviews:228, image:destinations[1].image, detail:'9 nights across Tokyo, Kyoto and Naoshima with artisans, ryokans and chef tables.', discount:'Includes rail and hosts' },
+  { id:'pkg-iceland', title:'Aurora Expedition Luxe', cat:'Adventure', price:11200, rating:4.9, reviews:184, image:destinations[2].image, detail:'6 nights of private aurora chasing, geothermal recovery, glacier landing and lodge dining.', discount:'Winter route bonus' },
+  { id:'pkg-family', title:'Dubai Family Futureland', cat:'Family', price:7600, rating:4.86, reviews:271, image:'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80', detail:'Theme parks, desert conservation, yacht afternoon and family suite with nanny concierge.', discount:'Kids concierge included' },
+  { id:'pkg-safari', title:'Kenya Sky Safari', cat:'Luxury', price:16400, rating:4.98, reviews:149, image:'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1000&q=80', detail:'Fly-in camps, conservation experts, sunrise balloon and private photo guide.', discount:'Partner lodge credit' },
+  { id:'pkg-paris', title:'Paris Couture Weekend', cat:'Luxury', price:6900, rating:4.88, reviews:201, image:'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1000&q=80', detail:'Palace hotel, atelier visit, Seine launch, Michelin dining and gallery access.', discount:'Limited spring seats' }
 ];
 const hotels = [
-  { name: 'The Orbital Ritz', city: 'Singapore', rating: 5, price: '$720/night', img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80' },
-  { name: 'Noir Lagoon Villas', city: 'Bora Bora', rating: 5, price: '$1,240/night', img: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=900&q=80' },
-  { name: 'Glassline Alpine Lodge', city: 'Zermatt', rating: 4, price: '$540/night', img: 'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=900&q=80' },
-  { name: 'Celestial Medina', city: 'Marrakech', rating: 5, price: '$410/night', img: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=900&q=80' }
+  { id:'hotel-joali', title:'JOALI Maldives Reserve', city:'Maldives', cat:'Maldives', price:1850, rating:5, reviews:517, image:'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1000&q=80', detail:'Art-led island villas, private butlers, reef access, wellness immersion and floating breakfast.', amenities:['Spa','Reef','Butler','Seaplane'] },
+  { id:'hotel-aman-kyoto', title:'Aman Kyoto Forest Pavilion', city:'Kyoto', cat:'Kyoto', price:1420, rating:5, reviews:404, image:'https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=1000&q=80', detail:'Forest pavilions, onsen-style bathing, gardens, tea ceremonies and serene dining.', amenities:['Onsen','Gardens','Tea','Spa'] },
+  { id:'hotel-paris', title:'Le Royal Rive Gauche', city:'Paris', cat:'Paris', price:980, rating:5, reviews:621, image:'https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1000&q=80', detail:'Palace-inspired suites, private art salon, Left Bank concierge and rooftop champagne.', amenities:['Rooftop','Art','Dining','Butler'] },
+  { id:'hotel-dubai', title:'Dubai Skyline Sanctuary', city:'Dubai', cat:'Dubai', price:760, rating:5, reviews:738, image:'https://images.unsplash.com/photo-1588439713344-26a756324ebc?auto=format&fit=crop&w=1000&q=80', detail:'Skyline pools, desert transfers, family club, yacht access and future-facing design.', amenities:['Pool','Yacht','Family','Desert'] },
+  { id:'hotel-ice', title:'Reykjavik Aurora Lodge', city:'Reykjavik', cat:'Reykjavik', price:690, rating:4, reviews:286, image:'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=80', detail:'Remote lodge access, glass sauna, aurora wake-up service and glacier-ready guides.', amenities:['Aurora','Sauna','Guide','Lodge'] }
+];
+const flights = [
+  { id:'flight-qr', title:'Qatar Airways Qsuite', cat:'Qatar Airways', price:4380, rating:4.9, reviews:980, image:'https://images.unsplash.com/photo-1540339832862-474599807836?auto=format&fit=crop&w=1000&q=80', detail:'JFK → DOH → HND · 1 stop · lie-flat privacy suite · 22h 10m total.' },
+  { id:'flight-ek', title:'Emirates First Apartment', cat:'Emirates', price:7600, rating:4.95, reviews:834, image:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1000&q=80', detail:'JFK → DXB → MLE · shower spa · chauffeur · 21h 45m total.' },
+  { id:'flight-sq', title:'Singapore Airlines Business', cat:'Singapore Airlines', price:5120, rating:4.92, reviews:746, image:'https://images.unsplash.com/photo-1529074963764-98f45c47344b?auto=format&fit=crop&w=1000&q=80', detail:'LAX → SIN → DPS · book-the-cook dining · 20h 35m total.' },
+  { id:'flight-dl', title:'Delta One Suites', cat:'Delta One', price:3840, rating:4.72, reviews:512, image:'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?auto=format&fit=crop&w=1000&q=80', detail:'ATL → CDG · nonstop · suite doors · 8h 25m total.' }
 ];
 const blogs = [
-  { title: 'The Rise of Quiet Luxury Travel', cat: 'Trends', img: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=900&q=80' },
-  { title: 'How to Design a Jet-Lag-Proof Itinerary', cat: 'Planning', img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80' },
-  { title: 'Private Islands That Still Feel Wild', cat: 'Destinations', img: destinations[5].img },
-  { title: 'A Concierge Guide to Kyoto After Dark', cat: 'Culture', img: destinations[1].img }
+  { id:'blog-weather', title:'How weather-aware planning changes luxury travel', cat:'Guides', price:0, rating:4.9, reviews:88, image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80', detail:'A practical look at timing, climate windows, route comfort and cancellation resilience.' },
+  { id:'blog-hotels', title:'Six hotel openings redefining privacy', cat:'Hotels', price:0, rating:4.8, reviews:64, image:'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1000&q=80', detail:'Private villas, conservation resorts and design-led city sanctuaries to watch.' },
+  { id:'blog-flights', title:'The smartest business-class routes this season', cat:'Flights', price:0, rating:4.7, reviews:71, image:'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?auto=format&fit=crop&w=1000&q=80', detail:'Availability patterns, aircraft swaps and premium cabin sweet spots.' },
+  { id:'blog-culture', title:'Private cultural access without extracting from place', cat:'Culture', price:0, rating:4.9, reviews:55, image:'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=1000&q=80', detail:'How to travel deeply with artists, guides and communities in respectful ways.' }
+];
+const testimonials = [
+  { name:'Maya Chen', role:'Founder, Singapore', photo:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80', text:'TravelEase felt like an executive product team redesigned our honeymoon. Every transfer, meal and room note was perfect.', rating:'★★★★★' },
+  { name:'Luca Moretti', role:'Creative Director, Milan', photo:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80', text:'The weather-aware routing saved our Iceland trip. We saw auroras twice and never felt rushed.', rating:'★★★★★' },
+  { name:'Amara Johnson', role:'Family traveler, New York', photo:'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=200&q=80', text:'The dashboard, wishlist and concierge flow made a complex family trip feel calm and premium.', rating:'★★★★★' }
+];
+const faqs = [
+  ['Is TravelEase a real-time booking engine?', 'This pure HTML/CSS/JS build simulates a production-grade interface and uses localStorage plus live weather API data.'],
+  ['How does the AI planner work?', 'It creates deterministic sample itineraries from preferences, budget, style, duration and traveler count without external AI dependencies.'],
+  ['Can I save destinations?', 'Yes. Wishlist, recent views, booking history, currency and theme preferences are saved locally in your browser.'],
+  ['Do you process payments?', 'No real payment is processed in this demo. Checkout validates fields and displays a success confirmation.']
 ];
 
-function initShell(){
-  setTimeout(() => $('.loader')?.classList.add('hide'), 450);
-  const path = location.pathname.split('/').pop() || 'index.html';
-  $$('.nav-links a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === path));
-  $('.hamburger')?.addEventListener('click', () => $('.nav-links')?.classList.toggle('open'));
-  const savedTheme = localStorage.getItem('te-theme') || 'dark';
-  document.documentElement.dataset.theme = savedTheme;
-  $('#themeToggle')?.addEventListener('click', () => {
-    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
-    document.documentElement.dataset.theme = next; localStorage.setItem('te-theme', next);
-  });
-  const top = $('.back-top');
-  addEventListener('scroll', () => top?.classList.toggle('show', scrollY > 650));
-  top?.addEventListener('click', () => scrollTo({top:0, behavior:'smooth'}));
-  const io = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')), {threshold:.12});
-  $$('.reveal').forEach(el => io.observe(el));
-  initCounters(); initFaq(); initSlider(); initForms(); initNewsletter(); initWeather(); initCurrency(); initBooking(); initCheckout();
+function initShell() {
+  document.body.dataset.theme = store.get('te-theme', 'dark');
+  setTimeout(() => $('.loader')?.classList.add('hide'), 600);
+  $$('.nav-links a').forEach(a => { if (a.getAttribute('href') === location.pathname.split('/').pop() || (location.pathname.endsWith('/') && a.getAttribute('href') === 'index.html')) a.classList.add('active'); });
+  $('.hamburger')?.addEventListener('click', e => { const menu = $('#primaryMenu'); menu?.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', String(menu?.classList.contains('open'))); });
+  $('#themeToggle')?.addEventListener('click', () => { const next = document.body.dataset.theme === 'light' ? 'dark' : 'light'; document.body.dataset.theme = next; store.set('te-theme', next); toast(`${next} mode enabled`); });
+  $('#currencySwitch')?.addEventListener('change', e => { store.set('te-currency', e.target.value); location.reload(); });
+  $('#languageSwitch')?.addEventListener('change', e => { store.set('te-language', e.target.value); toast(`Language preference saved: ${e.target.value}`); });
+  if ($('#currencySwitch')) $('#currencySwitch').value = store.get('te-currency', 'USD');
+  if ($('#languageSwitch')) $('#languageSwitch').value = store.get('te-language', 'EN');
+  window.addEventListener('scroll', () => { const max = document.documentElement.scrollHeight - innerHeight; $('#scrollProgress').style.width = `${Math.max(0, scrollY / max) * 100}%`; $('.back-top')?.classList.toggle('show', scrollY > 600); });
+  $('.back-top')?.addEventListener('click', () => scrollTo({ top:0, behavior:'smooth' }));
+  $('.whatsapp')?.addEventListener('click', () => toast('Concierge chat request received. We will respond shortly.'));
+  createParticles(); initReveal(); initMagnetic(); initForms(); initNewsletter(); initFaq(); initPasswordStrength(); initPageTransitions();
 }
-function cardTemplate(item, type='destination'){
-  return `<article class="card glass ${type==='destination'?'image-card':''} ${type==='blog'?'blog-card':''}" style="--img:url('${item.img}')">
-    ${type==='destination'?`<span class="tag">${item.region}</span><button class="icon-btn heart" data-wish="${item.name}" aria-label="Save ${item.name}">♡</button><div><span class="chip">${item.mood}</span><h3>${item.name}</h3><p class="meta">From ${item.price} · ${item.desc}</p><button class="btn" data-modal='${JSON.stringify(item)}'>Explore details</button></div>`:''}
-    ${type==='package'?`<div class="package-thumb" style="--img:url('${item.img}')"></div><span class="chip">${item.cat}</span><h3>${item.name}</h3><p class="meta">${item.days} · private concierge · flexible departures</p><p class="price">${item.price}</p><a class="btn primary" href="booking.html">Book package</a>`:''}
-    ${type==='hotel'?`<div class="hotel-thumb" style="--img:url('${item.img}')"></div><span class="stars">${'★'.repeat(item.rating)}${'☆'.repeat(5-item.rating)}</span><h3>${item.name}</h3><p class="meta">${item.city} · ${item.price}</p><button class="btn" data-modal='${JSON.stringify({...item, desc:'Signature suites, priority spa access, airport transfers and a TravelEase preferred guest upgrade path.'})}'>View hotel</button>`:''}
-    ${type==='blog'?`<div class="thumb" style="--img:url('${item.img}')"></div><span class="chip">${item.cat}</span><h3>${item.title}</h3><p class="meta">Editorial insight for travelers who value time, design and memorable access.</p><a class="btn" href="#">Read article</a>`:''}
-  </article>`;
-}
-function renderCards(list, target, type){ const el = $(target); if(el) el.innerHTML = list.map(x => cardTemplate(x,type)).join(''); bindDynamic(); }
-function bindDynamic(){
-  $$('[data-modal]').forEach(btn => btn.onclick = () => openModal(JSON.parse(btn.dataset.modal)));
-  $$('[data-wish]').forEach(btn => btn.onclick = () => toggleWish(btn.dataset.wish, btn)); refreshWishButtons();
-}
-function openModal(item){
-  const modal = $('#detailModal'); if(!modal) return;
-  $('#modalContent').innerHTML = `<button class="icon-btn close" onclick="document.getElementById('detailModal').classList.remove('show')">×</button><div class="modal-hero" style="--img:url('${item.img}')"></div><span class="chip">${item.region || item.city || 'TravelEase Select'}</span><h2 class="section-title" style="font-size:2.5rem">${item.name}</h2><p class="lead">${item.desc || 'A curated luxury experience with flexible dates, private transfers and human concierge support.'}</p><div class="pill-row"><span class="chip">${item.price}</span><span class="chip">VIP transfers</span><span class="chip">24/7 concierge</span></div><a class="btn primary" href="booking.html" style="margin-top:18px">Reserve this experience</a>`;
-  modal.classList.add('show');
-}
-function toggleWish(name, btn){ const set = new Set(JSON.parse(localStorage.getItem('te-wishlist')||'[]')); set.has(name)?set.delete(name):set.add(name); localStorage.setItem('te-wishlist', JSON.stringify([...set])); if(btn) btn.textContent=set.has(name)?'♥':'♡'; renderWishlist(); }
-function refreshWishButtons(){ const set = new Set(JSON.parse(localStorage.getItem('te-wishlist')||'[]')); $$('[data-wish]').forEach(b => b.textContent = set.has(b.dataset.wish)?'♥':'♡'); }
-function renderWishlist(){ const el = $('#wishlist'); if(!el) return; const list = JSON.parse(localStorage.getItem('te-wishlist')||'[]'); el.innerHTML = list.length ? list.map(n=>`<span class="chip">${n}</span>`).join('') : '<p class="meta">No saved destinations yet. Add favorites from the Destinations page.</p>'; }
-function initCounters(){ const nums = $$('.counter'); if(!nums.length) return; const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ const el=e.target, end=+el.dataset.count; let n=0; const step=Math.max(1, Math.ceil(end/70)); const t=setInterval(()=>{n+=step; el.textContent=n>=end?end:n; if(n>=end) clearInterval(t)},22); io.unobserve(el);} }), {threshold:.5}); nums.forEach(n=>io.observe(n)); }
-function initFaq(){ $$('.faq-q').forEach(q => q.addEventListener('click', () => q.parentElement.classList.toggle('open'))); }
-function initSlider(){ const s=$('.slides'); if(!s) return; let i=0; setInterval(()=>{i=(i+1)%s.children.length; s.style.transform=`translateX(-${i*100}%)`;},3600); }
-function initForms(){ $$('form[data-validate]').forEach(form => form.addEventListener('submit', e => { e.preventDefault(); const bad=[...form.querySelectorAll('[required]')].find(x=>!x.value.trim()); const note=form.querySelector('.notice'); if(bad){bad.focus(); if(note) note.textContent='Please complete all required fields.'; return;} if(note) note.textContent='Success — your request has been saved for this demo.'; })); }
-function initNewsletter(){ $('#newsletterForm')?.addEventListener('submit', e => { e.preventDefault(); localStorage.setItem('te-newsletter', $('#newsletterEmail').value); $('#newsletterNote').textContent='Welcome aboard. Premium travel drops are now unlocked.'; }); }
-function initWeather(){ const w=$('#weatherWidget'); if(w) w.innerHTML = '<strong>Dubai</strong><span class="meta"> 31°C · clear evening · ideal rooftop dining</span>'; }
-function initCurrency(){ const c=$('#currencyConverter'); if(!c) return; c.addEventListener('input', () => { const usd=+$('#usd').value||0; $('#eur').value=(usd*.92).toFixed(2); $('#jpy').value=(usd*157).toFixed(0); }); }
+function createParticles(){ const wrap=$('.particles'); if(!wrap) return; for(let i=0;i<28;i++){ const p=document.createElement('span'); p.className='particle'; p.style.setProperty('--x',`${Math.random()*100}%`); p.style.setProperty('--d',`${8+Math.random()*12}s`); p.style.animationDelay=`-${Math.random()*12}s`; wrap.appendChild(p); } }
+function initReveal(){ const obs=new IntersectionObserver(entries=>entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('visible'); obs.unobserve(entry.target); } }),{threshold:.12}); $$('.reveal,.card,.weather-card').forEach(el=>obs.observe(el)); initCounters(); }
+function initCounters(){ const obs=new IntersectionObserver(entries=>entries.forEach(entry=>{ if(!entry.isIntersecting) return; const el=entry.target,end=Number(el.dataset.count||0); let start=0; const step=()=>{ start += Math.max(1, Math.ceil(end/70)); el.textContent = start >= end ? end.toLocaleString() : start.toLocaleString(); if(start<end) requestAnimationFrame(step); }; step(); obs.unobserve(el); }),{threshold:.4}); $$('.counter').forEach(el=>obs.observe(el)); }
+function initMagnetic(){ $$('.magnetic').forEach(el=>{ el.addEventListener('mousemove',e=>{ const r=el.getBoundingClientRect(); el.style.transform=`translate(${(e.clientX-r.left-r.width/2)/10}px,${(e.clientY-r.top-r.height/2)/10}px)`; }); el.addEventListener('mouseleave',()=>el.style.transform=''); }); }
+function initPageTransitions(){ $$('a[href$=".html"]').forEach(a=>a.addEventListener('click',e=>{ if(e.metaKey||e.ctrlKey) return; const t=$('.page-transition'); if(!t) return; e.preventDefault(); t.style.opacity='.9'; setTimeout(()=>location.href=a.href,180); })); }
+function initForms(){ $$('form[data-validate]').forEach(form=>form.addEventListener('submit',e=>{ e.preventDefault(); const bad=$$('[required]',form).find(x=>!x.value.trim()); const note=$('.notice',form); if(bad){ bad.focus(); if(note) note.textContent='Please complete required fields.'; return; } if(note) note.textContent='Saved successfully. Our concierge will follow up.'; toast('Request saved'); })); }
+function toast(message){ const region=$('#toastRegion'); if(!region) return; const item=document.createElement('div'); item.className='toast glass'; item.textContent=message; region.appendChild(item); setTimeout(()=>item.remove(),3600); }
 
-function money(value){ return new Intl.NumberFormat('en-US', { style:'currency', currency:'USD', maximumFractionDigits:0 }).format(value); }
-function getBookingPayload(){ return JSON.parse(localStorage.getItem('te-booking') || 'null'); }
-function setBookingPayload(payload){ localStorage.setItem('te-booking', JSON.stringify(payload)); }
-function calculateBooking(){
-  const trip = $('#bookingTrip'); if(!trip) return null;
-  const selected = trip.selectedOptions[0];
-  const base = Number(selected.dataset.price || 0);
-  const travelers = Number($('#bookingTravelers')?.value || 1);
-  const cabin = Number($('#bookingCabin')?.value || 0);
-  const extras = Number($('#bookingExtras')?.value || 0);
-  const subtotal = (base * travelers) + cabin;
-  const total = subtotal + extras;
-  return {
-    trip: trip.value,
-    meta: selected.dataset.meta,
-    base,
-    travelers,
-    cabin,
-    extras,
-    subtotal,
-    total,
-    date: $('#bookingDate')?.value || 'Flexible',
-    name: $('#bookingName')?.value || 'Guest traveler',
-    email: $('#bookingEmail')?.value || '',
-    phone: $('#bookingPhone')?.value || '',
-    notes: $('#bookingNotes')?.value || ''
-  };
+function cardTemplate(item, type='destination') {
+  const isWish = store.get('te-wishlist', []).includes(item.id);
+  const price = item.price ? `<div class="price-line"><span>from</span><strong>${money(item.price)}</strong></div>` : '<p class="muted">Editorial intelligence</p>';
+  const tags = [item.region, item.mood, item.cat, item.city, item.discount].filter(Boolean).slice(0,3).map(t=>`<span class="chip">${t}</span>`).join('');
+  return `<article class="card glass reveal" data-id="${item.id}" data-type="${type}"><button class="icon-btn wish ${isWish?'active':''}" aria-label="Save ${item.title}" data-wish="${item.id}">♡</button><div class="card-img" loading="lazy" style="--img:url('${item.image}')"></div><div class="card-top">${tags}</div><h2>${item.title}</h2><p class="muted">${item.detail}</p><div class="rating" aria-label="Rated ${item.rating} out of 5">${'★'.repeat(Math.round(item.rating || 4))} <span class="muted">${item.rating} · ${item.reviews} reviews</span></div>${price}<div class="card-actions"><button class="btn primary" data-view="${item.id}" data-type="${type}">Quick view</button><a class="btn" href="booking.html" data-book="${item.id}">Book now</a></div></article>`;
 }
-function updateBookingSummary(){
-  const data = calculateBooking(); if(!data) return;
-  $('#bookingTripName').textContent = data.trip;
-  $('#bookingTripMeta').textContent = data.meta;
-  $('#summaryBase').textContent = money(data.base);
-  $('#summaryTravelers').textContent = data.travelers;
-  $('#summaryExtras').textContent = money(data.extras + data.cabin);
-  $('#summaryTotal').textContent = money(data.total);
-}
-function initBooking(){
-  const form = $('#bookingForm'); if(!form) return;
-  form.addEventListener('input', updateBookingSummary);
-  form.addEventListener('change', updateBookingSummary);
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const bad = [...form.querySelectorAll('[required]')].find(x => !x.value.trim());
-    const note = form.querySelector('.notice');
-    if(bad){ bad.focus(); if(note) note.textContent = 'Please complete every required booking detail.'; return; }
-    const payload = calculateBooking(); setBookingPayload(payload);
-    if(note) note.textContent = 'Booking saved. Opening secure checkout…';
-    setTimeout(() => { location.href = 'checkout.html'; }, 450);
-  });
-  updateBookingSummary();
-}
-function initCheckout(){
-  const card = $('.checkout-card'); if(!card) return;
-  const data = getBookingPayload() || { trip:'Maldives Nocturne', meta:'7 nights · private transfers · island concierge', travelers:2, subtotal:12400, extras:650, total:13050, date:'Flexible', name:'Guest traveler', email:'' };
-  const service = Math.round(data.total * 0.03);
-  $('#checkoutTripName').textContent = data.trip;
-  $('#checkoutMeta').textContent = data.meta;
-  $('#checkoutGuest').textContent = data.name;
-  $('#checkoutDate').textContent = data.date || 'Flexible';
-  $('#checkoutTravelers').textContent = data.travelers;
-  $('#checkoutSubtotal').textContent = money(data.subtotal);
-  $('#checkoutExtras').textContent = money(data.extras + (data.cabin || 0));
-  $('#checkoutService').textContent = money(service);
-  $('#checkoutTotal').textContent = money(data.total + service);
-  if(data.email && $('#checkoutEmail')) $('#checkoutEmail').value = data.email;
-  $('#checkoutForm')?.addEventListener('submit', e => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const bad = [...form.querySelectorAll('[required]')].find(x => x.type === 'checkbox' ? !x.checked : !x.value.trim());
-    const note = form.querySelector('.notice');
-    if(bad){ bad.focus(); if(note) note.textContent = 'Please complete payment details and accept the concierge hold.'; return; }
-    localStorage.setItem('te-last-checkout', new Date().toISOString());
-    if(note) note.textContent = 'Checkout complete. A TravelEase designer will confirm the final itinerary shortly.';
-  });
-}
+function renderCards(data, selector, type) { const grid=$(selector); if(!grid) return; grid.innerHTML = data.length ? data.map(x=>cardTemplate(x,type)).join('') : '<div class="empty">No matching premium experiences found.</div>'; bindCardActions(grid, data, type); initReveal(); }
+function bindCardActions(scope, data, type){ $$('[data-view]',scope).forEach(btn=>btn.addEventListener('click',()=>openModal(findItem(btn.dataset.view), type))); $$('[data-wish]',scope).forEach(btn=>btn.addEventListener('click',()=>toggleWish(btn.dataset.wish))); $$('[data-book]',scope).forEach(link=>link.addEventListener('click',()=>{ const item=findItem(link.dataset.book); store.set('te-booking-seed', item); addRecent(item); })); }
+function findItem(id){ return [...destinations,...packages,...hotels,...flights,...blogs].find(x=>x.id===id); }
+function openModal(item){ if(!item) return; addRecent(item); const modal=$('#detailModal'), box=$('#modalContent'); if(!modal||!box) return; box.innerHTML=`<button class="icon-btn modal-close" aria-label="Close modal">×</button><div class="card-img" style="--img:url('${item.image}')"></div><span class="eyebrow">${item.country||item.city||item.cat||'TravelEase'}</span><h2>${item.title}</h2><p class="lead">${item.detail}</p><div class="pill-row"><span class="chip">Rating ${item.rating}</span><span class="chip">${item.reviews} verified reviews</span>${item.price?`<span class="chip">${money(item.price)} starting price</span>`:''}</div><div class="card-actions"><button class="btn primary" data-wish="${item.id}">Save to wishlist</button><a class="btn" href="booking.html">Start booking</a></div>`; modal.classList.add('show'); $('.modal-close',box).addEventListener('click',()=>modal.classList.remove('show')); $('[data-wish]',box).addEventListener('click',()=>toggleWish(item.id)); }
+function toggleWish(id){ const list=store.get('te-wishlist',[]); const next=list.includes(id)?list.filter(x=>x!==id):[...list,id]; store.set('te-wishlist',next); toast(next.includes(id)?'Saved to wishlist':'Removed from wishlist'); renderAllDynamic(); renderDashboard(); }
+function addRecent(item){ if(!item) return; const rec=[item.id,...store.get('te-recent',[]).filter(id=>id!==item.id)].slice(0,6); store.set('te-recent',rec); }
+function filterPage(data, selector, type){ const q=($('#searchInput')?.value||'').toLowerCase(); const cat=$('#categoryFilter')?.value||'all'; const filtered=data.filter(x=>{ const hay=JSON.stringify(x).toLowerCase(); const okCat=cat==='all'||[x.region,x.mood,x.cat,x.city,x.country].includes(cat); return okCat && hay.includes(q); }); renderCards(filtered, selector, type); }
+function renderAllDynamic(){ renderCards(destinations.slice(0,6),'#trendingSlider','destination'); renderCards(hotels.slice(0,3),'#homeHotels','hotel'); renderCards(packages.slice(0,3),'#homePackages','package'); renderCards(blogs.slice(0,3),'#homeBlogs','blog'); renderCards(destinations,'#destinationGrid','destination'); renderCards(packages,'#packageGrid','package'); renderCards(hotels,'#hotelGrid','hotel'); renderCards(flights,'#flightGrid','flight'); renderCards(blogs,'#blogGrid','blog'); }
 
-function filterPage(data, grid, type){
-  const q=($('#searchInput')?.value||'').toLowerCase(), cat=$('#categoryFilter')?.value||'all';
-  renderCards(data.filter(x => (cat==='all'||x.region===cat||x.mood===cat||x.cat===cat||x.city===cat||x.cat===cat) && JSON.stringify(x).toLowerCase().includes(q)), grid, type);
-}
+async function initWeather(){ const grid=$('#weatherGrid'); if(!grid) return; const picks=destinations.slice(0,4); try{ const cards=await Promise.all(picks.map(async d=>{ const url=`https://api.open-meteo.com/v1/forecast?latitude=${d.lat}&longitude=${d.lon}&current=temperature_2m,weather_code,wind_speed_10m`; const res=await fetch(url); if(!res.ok) throw new Error('weather unavailable'); const json=await res.json(); const temp=Math.round(json.current.temperature_2m); return `<article class="weather-card glass reveal"><span class="eyebrow">${d.country}</span><h3>${d.title}</h3><strong>${temp}°C</strong><p class="muted">${weatherLabel(json.current.weather_code)} · wind ${Math.round(json.current.wind_speed_10m)} km/h</p></article>`; })); grid.innerHTML=cards.join(''); } catch(err){ grid.innerHTML=picks.map(d=>`<article class="weather-card glass"><span class="eyebrow">${d.country}</span><h3>${d.title}</h3><strong>Live soon</strong><p class="muted">Weather API fallback: ideal seasonal planning data is queued.</p></article>`).join(''); } initReveal(); }
+function weatherLabel(code){ if(code===0) return 'Clear'; if(code<4) return 'Partly cloudy'; if(code<50) return 'Cloud cover'; if(code<70) return 'Rain possible'; if(code<80) return 'Snow possible'; return 'Showers'; }
+function initWorldMap(){ const panel=$('#countryPanel'); $$('.map-node').forEach(node=>node.addEventListener('click',()=>{ const name=node.dataset.country; const item=destinations.find(d=>d.country===name); if(panel&&item) panel.innerHTML=`<span class="eyebrow">${item.country}</span><h3>${item.title}</h3><p>${item.detail}</p><div class="pill-row"><span class="chip">${item.mood}</span><span class="chip">${money(item.price)} from</span><span class="chip">${item.rating} rating</span></div>`; })); }
+function initTestimonials(){ const card=$('#testimonialCard'); if(!card) return; let i=0; const draw=()=>{ const t=testimonials[i]; card.innerHTML=`<div class="reviewer"><img loading="lazy" src="${t.photo}" alt="${t.name}"><div><h3>${t.name}</h3><p class="muted">${t.role}</p></div></div><p class="lead">“${t.text}”</p><div class="rating">${t.rating}</div>`; }; $('#nextTestimonial')?.addEventListener('click',()=>{i=(i+1)%testimonials.length;draw();}); $('#prevTestimonial')?.addEventListener('click',()=>{i=(i-1+testimonials.length)%testimonials.length;draw();}); draw(); setInterval(()=>{i=(i+1)%testimonials.length;draw();},7000); }
+function initFaq(){ const faq=$('#faqList'); if(!faq) return; faq.innerHTML=faqs.map(([q,a],i)=>`<div class="faq-item ${i===0?'open':''}"><button class="faq-question" aria-expanded="${i===0}"><span>${q}</span><strong>+</strong></button><div class="faq-answer">${a}</div></div>`).join(''); $$('.faq-question',faq).forEach(btn=>btn.addEventListener('click',()=>{ const item=btn.closest('.faq-item'); item.classList.toggle('open'); btn.setAttribute('aria-expanded',String(item.classList.contains('open'))); })); }
+function initNewsletter(){ $('#newsletterForm')?.addEventListener('submit',e=>{ e.preventDefault(); const email=$('#newsletterEmail').value; store.set('te-newsletter',email); $('#newsletterNote').textContent='Welcome aboard. Private travel drops are unlocked.'; toast('Newsletter subscription saved'); }); }
+function initPlanner(){ $('#aiPlanner')?.addEventListener('submit',e=>{ e.preventDefault(); const dest=$('#aiDestination').value||'Luxury escape'; const budget=Number($('#aiBudget').value||12000), days=Number($('#aiDuration').value||7), style=$('#aiStyle').value, travelers=Number($('#aiTravelers').value||2); const hotel=Math.round(budget*.38), flights=Math.round(budget*.28), experiences=Math.round(budget*.22), buffer=budget-hotel-flights-experiences; const rows=Array.from({length:Math.min(days,7)},(_,i)=>`<li><strong>Day ${i+1}:</strong> ${style} ${i%2?'signature dining and private guide':'arrival pacing, landmark access and wellness recovery'} for ${dest}.</li>`).join(''); $('#aiResult').innerHTML=`<span class="eyebrow">Generated plan</span><h3>${days}-day ${style} itinerary for ${travelers} traveler${travelers>1?'s':''}</h3><ul class="activity">${rows}</ul><div class="pill-row"><span class="chip">Hotels ${money(hotel)}</span><span class="chip">Flights ${money(flights)}</span><span class="chip">Activities ${money(experiences)}</span><span class="chip">Buffer ${money(buffer)}</span></div>`; store.set('te-search-history',[dest,...store.get('te-search-history',[]).slice(0,5)]); toast('AI-style itinerary generated'); }); }
+function initBudgetCalc(){ const form=$('#budgetCalc'); if(!form) return; const calc=()=>{ const base=Number($('#calcDestination').value), days=Number($('#calcDuration').value), hotel=Number($('#calcHotel').value)*days, transport=Number($('#calcTransport').value)*days, food=Number($('#calcFood').value)*days; const total=base+hotel+transport+food; $('#calcTotal').textContent=money(total); $('#calcBreakdown').textContent=`Base ${money(base)} + accommodation ${money(hotel)} + transport ${money(transport)} + dining ${money(food)}.`; }; form.addEventListener('input',calc); form.addEventListener('change',calc); calc(); }
+
+function populateBookingTrips(){ const sel=$('#bookingTrip'); if(!sel) return; const seed=store.get('te-booking-seed', packages[0]); const choices=[...packages,...destinations]; sel.innerHTML=choices.map(x=>`<option value="${x.title}" data-id="${x.id}" data-price="${x.price}" data-meta="${x.detail}" ${x.id===seed.id?'selected':''}>${x.title} · ${money(x.price)}</option>`).join(''); }
+function calculateBooking(){ const sel=$('#bookingTrip'); if(!sel) return null; const opt=sel.selectedOptions[0]; const base=Number(opt.dataset.price), travelers=Number($('#bookingTravelers')?.value||1), duration=Number($('#bookingDuration')?.value||7), cabin=Number($('#bookingCabin')?.value||0), extras=Number($('#bookingExtras')?.value||0), subtotal=(base*travelers)+cabin+extras, insurance=$('#bookingInsurance')?.checked?Math.round(subtotal*.045):0, tax=Math.round((subtotal+insurance)*.0825), total=subtotal+insurance+tax; return { trip:sel.value, meta:opt.dataset.meta, base, travelers, duration, cabin, extras, insurance, tax, subtotal, total, date:$('#bookingDate')?.value||'Flexible', name:$('#bookingName')?.value||'Guest traveler', email:$('#bookingEmail')?.value||'', phone:$('#bookingPhone')?.value||'', notes:$('#bookingNotes')?.value||'' }; }
+function updateBookingSummary(){ const d=calculateBooking(); if(!d) return; $('#bookingTripName').textContent=d.trip; $('#bookingTripMeta').textContent=d.meta; $('#summaryBase').textContent=money(d.base); $('#summaryTravelers').textContent=d.travelers; $('#summaryExtras').textContent=money(d.cabin+d.extras); $('#summaryInsurance').textContent=money(d.insurance); $('#summaryTax').textContent=money(d.tax); $('#summaryTotal').textContent=money(d.total); }
+function initWizard(prefix, panelsSel, stepsSel, nextSel, prevSel, submitSel){ const panels=$$(panelsSel), steps=$$(stepsSel); if(!panels.length) return; let index=0; const draw=()=>{ panels.forEach((p,i)=>p.classList.toggle('active',i===index)); steps.forEach((s,i)=>s.classList.toggle('active',i<=index)); $(prevSel).disabled=index===0; $(nextSel)?.classList.toggle('hidden',index===panels.length-1); $(submitSel)?.classList.toggle('hidden',index!==panels.length-1); }; $(nextSel)?.addEventListener('click',()=>{ index=Math.min(index+1,panels.length-1); draw(); }); $(prevSel)?.addEventListener('click',()=>{ index=Math.max(index-1,0); draw(); }); draw(); }
+function initBooking(){ populateBookingTrips(); const form=$('#bookingForm'); if(!form) return; initWizard('booking','.booking-step','.step','#nextBooking','#prevBooking','#submitBooking'); form.addEventListener('input',updateBookingSummary); form.addEventListener('change',updateBookingSummary); form.addEventListener('submit',e=>{ e.preventDefault(); const bad=$$('[required]',form).find(x=>!x.value.trim()); if(bad){ bad.focus(); $('.notice',form).textContent='Please complete every required booking detail.'; return; } const payload=calculateBooking(); store.set('te-booking',payload); store.set('te-booking-history',[payload,...store.get('te-booking-history',[]).slice(0,5)]); $('.notice',form).textContent='Booking saved. Opening secure checkout…'; toast('Booking saved'); setTimeout(()=>location.href='checkout.html',450); }); updateBookingSummary(); }
+function initCheckout(){ const form=$('#checkoutForm'); if(!form) return; initWizard('checkout','.checkout-panel','.checkout-step','#nextCheckout','#prevCheckout','#completeCheckout'); const d=store.get('te-booking',{trip:'Maldives Private Blue Week',meta:'7 nights · overwater suite · private concierge',name:'Guest',date:'Flexible',travelers:2,subtotal:12800,tax:1100,total:13900,email:''}); $('#checkoutTripName').textContent=d.trip; $('#checkoutMeta').textContent=d.meta; $('#checkoutGuest').textContent=d.name; $('#checkoutDate').textContent=d.date; $('#checkoutTravelers').textContent=d.travelers; $('#checkoutSubtotal').textContent=money(d.subtotal||d.total); $('#checkoutService').textContent=money(d.tax||Math.round(d.total*.08)); $('#checkoutTotal').textContent=money(d.total); if(d.email) $('#checkoutEmail').value=d.email; form.addEventListener('submit',e=>{ e.preventDefault(); const bad=$$('[required]',form).find(x=>x.type==='checkbox'?!x.checked:!x.value.trim()); if(bad){ bad.focus(); $('.notice',form).textContent='Please complete billing, payment and confirmation fields.'; return; } store.set('te-last-checkout',new Date().toISOString()); $('#successModal')?.classList.add('show'); toast('Checkout confirmed'); }); }
+function initDashboard(){ if(!$('.dashboard')) return; const wish=store.get('te-wishlist',[]).map(findItem).filter(Boolean); $('#wishCount').textContent=wish.length; $('#wishlistGrid').innerHTML=wish.length?wish.map(x=>`<p class="summary-row"><span>${x.title}</span><button class="btn" onclick="removeWishInline('${x.id}')">Remove</button></p>`).join(''):'<p class="empty">No saved destinations yet.</p>'; const booking=store.get('te-booking',null); $('#dashboardTrips').innerHTML=booking?`<p><strong>${booking.trip}</strong><br><span class="muted">${booking.date} · ${booking.travelers} travelers · ${money(booking.total)}</span></p>`:'<p class="empty">No upcoming trips. Start a booking to populate this panel.</p>'; const history=store.get('te-booking-history',[]); $('#bookingHistory').innerHTML=history.length?history.map(x=>`<p class="summary-row"><span>${x.trip}</span><strong>${money(x.total)}</strong></p>`).join(''):'<p class="empty">Booking history will appear here.</p>'; }
+window.removeWishInline=id=>{ store.set('te-wishlist',store.get('te-wishlist',[]).filter(x=>x!==id)); initDashboard(); toast('Wishlist updated'); };
+function initPasswordStrength(){ const input=$('#passwordInput'), bar=$('#strengthBar'); if(!input||!bar) return; input.addEventListener('input',()=>{ const v=input.value; let score=Math.min(100,v.length*10+( /[A-Z]/.test(v)?20:0)+( /\d/.test(v)?20:0)+( /[^\w]/.test(v)?20:0)); bar.style.width=`${score}%`; }); }
+function initListingFilters(){ $('#searchInput')?.addEventListener('input',()=>{ if($('#destinationGrid')) filterPage(destinations,'#destinationGrid','destination'); if($('#packageGrid')) filterPage(packages,'#packageGrid','package'); if($('#hotelGrid')) filterPage(hotels,'#hotelGrid','hotel'); if($('#flightGrid')) filterPage(flights,'#flightGrid','flight'); if($('#blogGrid')) filterPage(blogs,'#blogGrid','blog'); }); $('#categoryFilter')?.addEventListener('change',()=>$('#searchInput')?.dispatchEvent(new Event('input'))); }
 
 document.addEventListener('DOMContentLoaded', () => {
-  initShell();
-  renderCards(destinations.slice(0,3), '#featuredDestinations', 'destination');
-  renderCards(packages.slice(0,3), '#popularPackages', 'package');
-  renderCards(destinations, '#destinationGrid', 'destination');
-  renderCards(packages, '#packageGrid', 'package');
-  renderCards(hotels, '#hotelGrid', 'hotel');
-  renderCards(blogs, '#blogGrid', 'blog');
-  renderWishlist();
-  $('#searchInput')?.addEventListener('input', () => { if($('#destinationGrid')) filterPage(destinations,'#destinationGrid','destination'); if($('#packageGrid')) filterPage(packages,'#packageGrid','package'); if($('#hotelGrid')) filterPage(hotels,'#hotelGrid','hotel'); if($('#blogGrid')) filterPage(blogs,'#blogGrid','blog'); });
-  $('#categoryFilter')?.addEventListener('change', () => { if($('#destinationGrid')) filterPage(destinations,'#destinationGrid','destination'); if($('#packageGrid')) filterPage(packages,'#packageGrid','package'); if($('#hotelGrid')) filterPage(hotels,'#hotelGrid','hotel'); if($('#blogGrid')) filterPage(blogs,'#blogGrid','blog'); });
-  $('#detailModal')?.addEventListener('click', e => { if(e.target.id==='detailModal') e.currentTarget.classList.remove('show'); });
+  initShell(); renderAllDynamic(); initWeather(); initWorldMap(); initTestimonials(); initPlanner(); initBudgetCalc(); initBooking(); initCheckout(); initDashboard(); initListingFilters();
+  $('#detailModal')?.addEventListener('click', e => { if (e.target.id === 'detailModal') e.currentTarget.classList.remove('show'); });
+  $('#flightSearch')?.addEventListener('submit', e => { e.preventDefault(); toast('Flight comparison refreshed with preferred route'); });
 });
