@@ -1,37 +1,80 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="TravelEase creates luxury travel, hotel, flight and concierge experiences with a modern startup-grade interface."><title>TravelEase | Premium Travel Reimagined</title><link rel="stylesheet" href="css/style.css"></head><body>
-<div class="loader"><div class="orb"></div></div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TravelEase is a premium luxury travel platform with AI trip planning, live weather, hotels, flights, packages and concierge booking.">
+  <meta name="theme-color" content="#050814"><meta property="og:type" content="website"><meta property="og:title" content="TravelEase Luxury Travel Platform"><meta property="og:description" content="Premium travel planning, hotels, flights, packages, weather, dashboards and concierge booking."><meta property="og:image" content="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"><link rel="preconnect" href="https://images.unsplash.com"><link rel="preconnect" href="https://cdn.coverr.co">
+  <title>TravelEase | Luxury Travel Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"TravelEase","url":"https://example.com","description":"Premium luxury travel planning and booking platform","areaServed":"Worldwide"}</script>
+</head>
+<body>
+<div class="progress" id="scrollProgress"></div>
+<div class="page-transition" aria-hidden="true"></div>
+<div class="loader" aria-label="Loading TravelEase"><div class="orb"></div><p>Preparing premium routes…</p></div>
+<div class="particles" aria-hidden="true"></div>
 <nav class="nav glass" aria-label="Primary navigation">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a>
-    <div class="nav-links">
+    <a class="brand magnetic" href="index.html" aria-label="TravelEase home"><span class="brand-mark">✦</span><span>TravelEase</span></a>
+    <button class="icon-btn hamburger" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+    <div class="nav-links" id="primaryMenu">
       <a href="index.html">Home</a><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a><a href="blog.html">Blog</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="dashboard.html">Dashboard</a>
     </div>
-    <div class="nav-actions"><button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button><a class="btn" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a><button class="icon-btn hamburger" aria-label="Open menu">☰</button></div>
+    <div class="nav-actions">
+      <select id="currencySwitch" class="mini-select" aria-label="Currency"><option>USD</option><option>EUR</option><option>GBP</option><option>AED</option></select>
+      <select id="languageSwitch" class="mini-select" aria-label="Language"><option>EN</option><option>FR</option><option>AR</option><option>JP</option></select>
+      <button id="themeToggle" class="icon-btn" aria-label="Toggle color mode">☾</button>
+      <a class="btn ghost" href="login.html">Login</a><a class="btn primary" href="register.html">Join</a>
+    </div>
   </div>
 </nav>
-<header class="hero">
-  <video class="hero-video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"><source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-a-beach-3194/1080p.mp4" type="video/mp4"></video>
-  <div class="container hero-content hero-grid"><div><span class="eyebrow">Luxury itineraries without friction</span><h1>Travel that feels <span class="gradient-text">engineered for wonder.</span></h1><p class="lead">Plan cinematic escapes with boutique hotels, private guides, flight intelligence and a concierge layer that remembers what you love.</p><form class="search-panel glass" data-validate><div class="field"><label>Where to?</label><input class="input" required placeholder="Maldives, Kyoto, Patagonia"></div><div class="field"><label>Dates</label><input class="input" required type="date"></div><div class="field"><label>Travelers</label><select><option>2 guests</option><option>Family</option><option>Solo</option></select></div><button class="btn primary">Design trip</button><p class="notice"></p></form></div><aside class="hero-card glass"><div class="hero-img"></div><h3>Maldives Nocturne</h3><p class="meta">Bioluminescent lagoon dining, reef restoration dives and overwater villas.</p><div class="metric"><span class="meta">Member score</span><strong>9.8</strong></div></aside></div>
+<header class="hero fullscreen">
+  <video class="hero-video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80"><source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-a-beach-3194/1080p.mp4" type="video/mp4"></video>
+  <div class="hero-aurora"></div>
+  <div class="container hero-grid">
+    <section class="hero-copy reveal">
+      <span class="eyebrow">AI-assisted luxury travel operating system</span>
+      <h1>Design rare journeys with <span class="gradient-text">live intelligence</span> and human concierge polish.</h1>
+      <p class="lead">TravelEase combines destination discovery, weather signals, route planning, verified hotels, premium packages and a cinematic booking workflow in one refined platform.</p>
+      <form class="ai-search glass" data-validate id="heroSearch"><label><span>Dream destination</span><input class="input" required placeholder="Bali, Amalfi, Kyoto, Iceland"></label><label><span>Budget</span><select id="heroBudget"><option>$8k luxury</option><option>$15k ultra-luxury</option><option>$25k private escape</option></select></label><label><span>Travel style</span><select><option>Romantic</option><option>Adventure</option><option>Family</option><option>Cultural</option></select></label><button class="btn primary magnetic">Generate itinerary</button><p class="notice"></p></form>
+      <div class="hero-actions"><a class="btn primary magnetic" href="booking.html">Start booking</a><a class="btn glass-btn magnetic" href="#ai-planner">Try AI planner</a></div>
+    </section>
+    <aside class="hero-command glass reveal">
+      <div class="status-row"><span class="pulse"></span><span>Live concierge network</span><strong>98.7%</strong></div>
+      <div class="hero-card-img" role="img" aria-label="Maldives villa"></div>
+      <h2>Maldives Nocturne</h2><p class="muted">Reef restoration dive, overwater villa, seaplane transfer, private bioluminescence dinner.</p>
+      <div class="price-line"><span>from</span><strong>$6,200</strong><span>/ traveler</span></div>
+    </aside>
+  </div>
 </header>
 <main>
-<section class="section"><div class="container"><span class="eyebrow">Featured destinations</span><h2 class="section-title">Curated places with unusual access.</h2><div id="featuredDestinations" class="grid grid-3 reveal"></div></div></section>
-<section class="section compact"><div class="container stats"><div class="stat glass reveal"><strong class="counter" data-count="64">0</strong><p class="meta">private routes</p></div><div class="stat glass reveal"><strong class="counter" data-count="12800">0</strong><p class="meta">premium travelers</p></div><div class="stat glass reveal"><strong class="counter" data-count="97">0</strong><p class="meta">satisfaction score</p></div><div class="stat glass reveal"><strong class="counter" data-count="24">0</strong><p class="meta">hour concierge</p></div></div></section>
-<section class="section"><div class="container split"><div><span class="eyebrow">World map</span><h2 class="section-title">Tap into a private network across continents.</h2><p class="lead">Our interactive route intelligence highlights seasonal weather, flight comfort and hotel availability before you book.</p><div id="weatherWidget" class="glass card"></div></div><div class="map glass"><svg viewBox="0 0 900 480" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M105 250c80-90 164-102 253-55 72 38 104 18 175-35 75-56 161-29 244 42M155 330c172-44 296-39 420 2 82 27 142 16 216-42"/></svg><span class="pin"></span><span class="pin"></span><span class="pin"></span></div></div></section>
-<section class="section"><div class="container"><span class="eyebrow">Popular packages</span><h2 class="section-title">High-touch escapes, packaged beautifully.</h2><div id="popularPackages" class="grid grid-3 reveal"></div></div></section>
-<section class="section compact"><div class="container"><div class="slider glass"><div class="slides"><div class="slide" style="--img:url('https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=1400&q=80')"><h2>Venice by private launch</h2></div><div class="slide" style="--img:url('https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1400&q=80')"><h2>Lantern nights in Asia</h2></div><div class="slide" style="--img:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1400&q=80')"><h2>Alpine silence, five-star warmth</h2></div></div></div></div></section>
-<section class="section"><div class="container"><span class="eyebrow">Gallery</span><h2 class="section-title">A moving moodboard for your next chapter.</h2><div class="marquee"><div class="marquee-track"><div class="gallery-tile" style="--img:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80')"></div><div class="gallery-tile" style="--img:url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=80')"></div><div class="gallery-tile" style="--img:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80')"></div><div class="gallery-tile" style="--img:url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=600&q=80')"></div><div class="gallery-tile" style="--img:url('https://images.unsplash.com/photo-1491555103944-7c647fd857e6?auto=format&fit=crop&w=600&q=80')"></div><div class="gallery-tile" style="--img:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80')"></div></div></div></div></section>
-<section class="section compact"><div class="container grid grid-3"><blockquote class="card glass reveal"><p>“TravelEase turned a family trip into a precision-crafted story.”</p><b>— Maya R.</b></blockquote><blockquote class="card glass reveal"><p>“The interface feels like a private banker for travel.”</p><b>— Leon K.</b></blockquote><blockquote class="card glass reveal"><p>“Fast, elegant and deeply human when it mattered.”</p><b>— Amara S.</b></blockquote></div></section>
-<section class="section"><div class="container form-card glass"><span class="eyebrow">Newsletter</span><h2 class="section-title">Receive the private drop.</h2><form id="newsletterForm" class="search-panel"><input id="newsletterEmail" class="input" type="email" required placeholder="you@example.com"><button class="btn primary">Subscribe</button><p id="newsletterNote" class="notice"></p></form></div></section>
+<section class="section compact"><div class="container stats" aria-label="TravelEase statistics"><div class="stat glass reveal"><strong class="counter" data-count="12800">0</strong><span>Travelers</span></div><div class="stat glass reveal"><strong class="counter" data-count="86">0</strong><span>Destinations</span></div><div class="stat glass reveal"><strong class="counter" data-count="240">0</strong><span>Tours</span></div><div class="stat glass reveal"><strong class="counter" data-count="9700">0</strong><span>Reviews</span></div></div></section>
+<section class="section"><div class="container section-head"><span class="eyebrow">Trending now</span><h2>Destination intelligence with quick-view booking signals.</h2><p class="lead">Filter by region, price and travel mood, then save favorites to your dashboard.</p></div><div class="container"><div id="trendingSlider" class="horizontal-slider reveal"></div></div></section>
+<section class="section"><div class="container split"><div class="reveal"><span class="eyebrow">Interactive world map</span><h2>Explore countries, routes and seasonal highlights.</h2><p class="lead">Clickable destination nodes reveal weather, route ideas and concierge notes. Animated arcs show sample premium routes.</p><div id="countryPanel" class="glass info-panel">Select a glowing country node to explore highlights.</div></div><div class="world-stage glass reveal" id="worldMap" tabindex="0" aria-label="Interactive world map with destination buttons"><svg viewBox="0 0 900 500" aria-hidden="true"><path class="route" d="M160 260 C300 90 510 110 700 240"/><path class="route two" d="M250 340 C410 420 560 390 760 300"/></svg><button class="map-node" style="--x:22%;--y:50%" data-country="Iceland" aria-label="Explore Iceland"></button><button class="map-node" style="--x:48%;--y:44%" data-country="Morocco" aria-label="Explore Morocco"></button><button class="map-node" style="--x:66%;--y:47%" data-country="Japan" aria-label="Explore Japan"></button><button class="map-node" style="--x:78%;--y:68%" data-country="Maldives" aria-label="Explore Maldives"></button></div></div></section>
+<section class="section"><div class="container section-head"><span class="eyebrow">Live conditions</span><h2>Weather-aware premium planning.</h2></div><div class="container weather-grid" id="weatherGrid"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></section>
+<section class="section"><div class="container section-head"><span class="eyebrow">Popular hotels</span><h2>Verified luxury stays with amenity intelligence.</h2></div><div class="container grid grid-3" id="homeHotels"></div></section>
+<section class="section"><div class="container section-head"><span class="eyebrow">Exclusive packages</span><h2>Handcrafted journeys with dynamic pricing.</h2></div><div class="container grid grid-3" id="homePackages"></div></section>
+<section class="section" id="ai-planner"><div class="container split"><form id="aiPlanner" class="form-card glass reveal"><span class="eyebrow">AI Trip Planner</span><h2>Generate a detailed luxury itinerary.</h2><div class="form-grid"><label>Preferences<input class="input" id="aiDestination" required placeholder="Japan temples, food, spa"></label><label>Budget<input class="input" id="aiBudget" type="number" min="1000" value="12000"></label><label>Duration<input class="input" id="aiDuration" type="number" min="2" value="7"></label><label>Style<select id="aiStyle"><option>Luxury</option><option>Adventure</option><option>Family</option><option>Romantic</option><option>Cultural</option></select></label><label>Travelers<input class="input" id="aiTravelers" type="number" min="1" value="2"></label></div><button class="btn primary">Generate suggested plan</button></form><div id="aiResult" class="glass itinerary reveal"><h3>Your itinerary will appear here</h3><p class="muted">Includes day-by-day activities, hotel tier, estimated flights and cost allocation.</p></div></div></section>
+<section class="section"><div class="container split"><form id="budgetCalc" class="form-card glass reveal"><span class="eyebrow">Trip Cost Calculator</span><h2>Estimate total spend instantly.</h2><div class="form-grid"><label>Destination<select id="calcDestination"><option value="6200">Maldives</option><option value="3200">Kyoto</option><option value="4800">Iceland</option><option value="3900">Morocco</option></select></label><label>Duration<input class="input" id="calcDuration" type="number" value="7" min="1"></label><label>Accommodation<select id="calcHotel"><option value="550">Luxury hotel</option><option value="950">Ultra-luxury suite</option><option value="1600">Private villa</option></select></label><label>Transport<select id="calcTransport"><option value="180">Business flights</option><option value="420">First class</option><option value="900">Private transfer</option></select></label><label>Food/day<input class="input" id="calcFood" type="number" value="220"></label></div></form><div class="glass calc-result reveal"><span class="eyebrow">Estimated total</span><strong id="calcTotal">$0</strong><p id="calcBreakdown" class="muted"></p></div></div></section>
+<section class="section"><div class="container section-head"><span class="eyebrow">Traveler love</span><h2>Verified reviews from discerning guests.</h2></div><div class="container testimonial glass reveal"><button class="icon-btn" id="prevTestimonial" aria-label="Previous testimonial">‹</button><article id="testimonialCard"></article><button class="icon-btn" id="nextTestimonial" aria-label="Next testimonial">›</button></div></section>
+<section class="section"><div class="container section-head"><span class="eyebrow">Insights</span><h2>Travel news and private-access guides.</h2></div><div class="container grid grid-3" id="homeBlogs"></div></section>
+<section class="section compact"><div class="container partners glass reveal"><span>Aman</span><span>Four Seasons</span><span>Emirates</span><span>Qatar Airways</span><span>Virtuoso</span><span>Belmond</span></div></section>
+<section class="section"><div class="container split"><div class="newsletter glass reveal"><span class="eyebrow">Private drops</span><h2>Receive members-only travel windows.</h2><form id="newsletterForm"><input id="newsletterEmail" class="input" type="email" required placeholder="you@example.com"><button class="btn primary">Subscribe</button></form><p id="newsletterNote" class="notice"></p></div><div class="faq reveal" id="faqList"></div></div></section>
 </main>
 <footer class="footer">
   <div class="container footer-grid">
-    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="meta">A premium travel operating system for discerning explorers, founders and design-led families.</p></div>
-    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Tour Packages</a><a href="hotels.html">Hotels</a><a href="booking.html">Booking</a><a href="checkout.html">Checkout</a></div>
-    <div><strong>Company</strong><a href="about.html">About Us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a></div>
-    <div><strong>Members</strong><a href="login.html">Login</a><a href="register.html">Register</a><a href="dashboard.html">Dashboard</a></div>
-  </div><div class="container"><p class="meta">© 2026 TravelEase. Crafted with glass, gradients and concierge-grade care.</p></div>
+    <div><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>TravelEase</span></a><p class="muted">A luxury travel intelligence platform blending human concierge service, live data, and cinematic discovery.</p><div class="socials"><a aria-label="Instagram" href="#">◎</a><a aria-label="X" href="#">𝕏</a><a aria-label="LinkedIn" href="#">in</a></div></div>
+    <div><strong>Explore</strong><a href="destinations.html">Destinations</a><a href="packages.html">Packages</a><a href="hotels.html">Hotels</a><a href="flights.html">Flights</a></div>
+    <div><strong>Company</strong><a href="about.html">About us</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a><a href="dashboard.html">Members</a></div>
+    <div><strong>Trust</strong><a href="#">Verified reviews</a><a href="#">Travel protection</a><a href="#">Partner network</a><a href="#">Privacy</a></div>
+  </div>
+  <div class="container subfooter"><span>© 2026 TravelEase. Built for premium explorers.</span><span>Structured data · lazy media · accessible controls</span></div>
 </footer>
+<button class="whatsapp" aria-label="Chat with TravelEase concierge">✆</button>
 <button class="icon-btn back-top" aria-label="Back to top">↑</button>
-<div class="modal" id="detailModal"><div class="modal-box glass" id="modalContent"></div></div>
-<script src="js/app.js"></script>
-</body></html>
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-label="Travel detail"><div class="modal-box glass" id="modalContent"></div></div>
+<div id="toastRegion" class="toast-region" aria-live="polite"></div>
+<script src="js/app.js" defer></script>
+</body>
+</html>
