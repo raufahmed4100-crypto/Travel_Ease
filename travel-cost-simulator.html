@@ -3,9 +3,9 @@
 <head>
 <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='TravelEase Packages premium travel page.'>
+<meta name='description' content='TravelEase Travel Cost Simulator premium travel page.'>
 <meta name='theme-color' content='#050814'>
-<title>Packages | TravelEase</title>
+<title>Travel Cost Simulator | TravelEase</title>
 <link rel='stylesheet' href='css/style.css'>
 </head>
 <body>
@@ -55,14 +55,14 @@
 </div>
 </nav>
 <header class='hero page-premium'>
-<img class='hero-video' src='https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80' alt='Premium travel visual'>
+<img class='hero-video' src='https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1800&q=80' alt='Premium travel visual'>
 <div class='hero-aurora'>
 </div>
 <div class='container hero-grid'>
 <section class='hero-copy reveal'>
-<span class='eyebrow'>Premium packages</span>
-<h1>Book refined escapes engineered for confidence.</h1>
-<p class='lead'>Compare inclusive packages, signature moments, upgrades and seasonal access with premium cards and quick booking paths.</p>
+<span class='eyebrow'>Transparent trip economics</span>
+<h1>Model your whole trip before you commit.</h1>
+<p class='lead'>Simulate flights, hotels, food, transfers, experiences, insurance and buffer so luxury decisions stay financially effortless.</p>
 <div class='hero-actions'>
 <a class='btn primary magnetic' href='booking-invoice.html'>Start booking</a>
 <a class='btn glass-btn magnetic' href='#details'>Explore page</a>
@@ -72,12 +72,12 @@
 <div class='status-row'>
 <span class='pulse'>
 </span>
-<span>Packages engine</span>
+<span>Travel Cost Simulator engine</span>
 <strong>Live</strong>
 </div>
-<div class='hero-card-img' style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80')">
+<div class='hero-card-img' style="background-image:url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1800&q=80')">
 </div>
-<h2>Packages</h2>
+<h2>Travel Cost Simulator</h2>
 <p class='muted'>Premium visual system, interactive cards, clear CTA paths and polished responsive UX.</p>
 </aside>
 </div>
@@ -88,7 +88,7 @@
 <article class='card glass reveal'>
 <span class='eyebrow'>Signal 01</span>
 <h2>Personalized intelligence</h2>
-<p class='muted'>Traveler profile, pace, seasonality and comfort preferences shape every recommendation on the Packages page.</p>
+<p class='muted'>Traveler profile, pace, seasonality and comfort preferences shape every recommendation on the Travel Cost Simulator page.</p>
 </article>
 <article class='card glass reveal'>
 <span class='eyebrow'>Signal 02</span>
@@ -102,18 +102,43 @@
 </article>
 </div>
 </section>
-<section class='container toolbar glass'>
-<input id='searchInput' class='input' placeholder='Search by destination, mood, rating or amenity'>
-<select id='categoryFilter'>
-<option value='all'>All categories</option>
-<option>Luxury</option>
-<option>Adventure</option>
-<option>Romantic</option>
-<option>Cultural</option>
-<option>Family</option>
+<section class='section'>
+<div class='container split'>
+<form id='budgetCalc' class='form-card glass reveal'>
+<span class='eyebrow'>Interactive simulator</span>
+<h2>Estimate total spend instantly.</h2>
+<div class='form-grid'>
+<label>Destination<select id='calcDestination'>
+<option value='6200'>Maldives</option>
+<option value='3200'>Kyoto</option>
+<option value='4800'>Iceland</option>
+<option value='3900'>Morocco</option>
 </select>
-</section>
-<section class='container grid grid-3' id='packageGrid'>
+</label>
+<label>Duration<input class='input' id='calcDuration' type='number' value='7' min='1'>
+</label>
+<label>Accommodation<select id='calcHotel'>
+<option value='550'>Luxury hotel</option>
+<option value='950'>Ultra-luxury suite</option>
+<option value='1600'>Private villa</option>
+</select>
+</label>
+<label>Transport<select id='calcTransport'>
+<option value='180'>Business flights</option>
+<option value='420'>First class</option>
+</select>
+</label>
+<label>Food/day<input class='input' id='calcFood' type='number' value='220'>
+</label>
+</div>
+</form>
+<div class='glass calc-result reveal'>
+<span class='eyebrow'>Estimated total</span>
+<strong id='calcTotal'>$0</strong>
+<p id='calcBreakdown' class='muted'>
+</p>
+</div>
+</div>
 </section>
 <section class='section'>
 <div class='container split'>

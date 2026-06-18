@@ -53,6 +53,21 @@ const faqs = [
   ['Can I save destinations?', 'Yes. Wishlist, recent views, booking history, currency and theme preferences are saved locally in your browser.'],
   ['Do you process payments?', 'No real payment is processed in this demo. Checkout validates fields and displays a success confirmation.']
 ];
+const premiumPageTools = {
+  'Home': { score: 96, focus: 'Operating system', tabs: ['Plan', 'Compare', 'Book'], metrics: ['13 pages', 'Live CTAs', 'Premium UX'], insight: 'A command center that routes travelers from inspiration to a concierge-ready booking workspace.' },
+  'Travel Twin': { score: 91, focus: 'Traveler DNA', tabs: ['Pace', 'Taste', 'Budget'], metrics: ['4 styles', 'Twin match', 'Saved profile'], insight: 'Matches trip ideas to traveler behavior, preferred rhythm and hotel personality.' },
+  'Travel Reality Score': { score: 88, focus: 'Trip feasibility', tabs: ['Crowds', 'Weather', 'Logistics'], metrics: ['Comfort', 'Risk', 'Timing'], insight: 'Turns beautiful ideas into practical scores across seasonality, budget pressure and on-the-ground friction.' },
+  'Where Can I Go Right Now?': { score: 84, focus: 'Immediate options', tabs: ['Passport', 'Flights', 'Weather'], metrics: ['Open now', '< 8h flight', 'Good value'], insight: 'Prioritizes places with low-friction availability, strong weather and realistic near-term booking paths.' },
+  'Travel Cost Simulator': { score: 93, focus: 'Cost clarity', tabs: ['Flights', 'Hotels', 'Dining'], metrics: ['Live total', 'Daily view', 'Buffer'], insight: 'Models full-trip economics so premium travel decisions stay transparent before checkout.' },
+  'Hidden Gems Explorer': { score: 89, focus: 'Quiet luxury', tabs: ['Underrated', 'Safe', 'Access'], metrics: ['Low crowds', 'Boutique', 'Local guide'], insight: 'Surfaces less obvious places with enough infrastructure, taste and concierge support for premium travelers.' },
+  'Passport Power Explorer': { score: 87, focus: 'Visa confidence', tabs: ['Visa-free', 'eVisa', 'Prep'], metrics: ['Entry path', 'Docs', 'Timeline'], insight: 'Frames destination choice around passport access, document readiness and concierge preparation windows.' },
+  'Trip Regret Predictor': { score: 82, focus: 'Regret prevention', tabs: ['Mismatch', 'Fatigue', 'Spend'], metrics: ['Red flags', 'Pace fit', 'Save trip'], insight: 'Flags the hidden reasons travelers regret otherwise beautiful trips before they spend.' },
+  'Destinations': { score: 94, focus: 'Destination fit', tabs: ['Region', 'Mood', 'Season'], metrics: ['6 cards', 'Wishlist', 'Quick view'], insight: 'Combines searchable destination cards with save and booking actions powered by existing data.' },
+  'Packages': { score: 92, focus: 'Packaged journeys', tabs: ['Luxury', 'Family', 'Adventure'], metrics: ['Dynamic cards', 'Discounts', 'Book now'], insight: 'Packages are presented as conversion-ready cards with inclusions, ratings and booking handoff.' },
+  'Booking & Invoice': { score: 95, focus: 'Checkout readiness', tabs: ['Trip', 'Travelers', 'Invoice'], metrics: ['Live total', 'Tax', 'Insurance'], insight: 'Turns selected products into a multi-step booking and invoice preview without payment risk.' },
+  'About Us': { score: 86, focus: 'Trust story', tabs: ['Team', 'Network', 'Standards'], metrics: ['Human led', 'Data aware', 'Verified'], insight: 'Positions TravelEase as a concierge business supported by product discipline and partner quality.' },
+  'Contact Us': { score: 90, focus: 'Lead capture', tabs: ['Idea', 'Budget', 'Timing'], metrics: ['Email CTA', 'Concierge', 'Fast reply'], insight: 'Collects high-intent traveler requests and routes them into a premium concierge conversation.' }
+};
 
 function initShell() {
   document.body.dataset.theme = store.get('te-theme', 'dark');
@@ -111,9 +126,28 @@ function initDashboard(){ if(!$('.dashboard')) return; const wish=store.get('te-
 window.removeWishInline=id=>{ store.set('te-wishlist',store.get('te-wishlist',[]).filter(x=>x!==id)); initDashboard(); toast('Wishlist updated'); };
 function initPasswordStrength(){ const input=$('#passwordInput'), bar=$('#strengthBar'); if(!input||!bar) return; input.addEventListener('input',()=>{ const v=input.value; let score=Math.min(100,v.length*10+( /[A-Z]/.test(v)?20:0)+( /\d/.test(v)?20:0)+( /[^\w]/.test(v)?20:0)); bar.style.width=`${score}%`; }); }
 function initListingFilters(){ $('#searchInput')?.addEventListener('input',()=>{ if($('#destinationGrid')) filterPage(destinations,'#destinationGrid','destination'); if($('#packageGrid')) filterPage(packages,'#packageGrid','package'); if($('#hotelGrid')) filterPage(hotels,'#hotelGrid','hotel'); if($('#flightGrid')) filterPage(flights,'#flightGrid','flight'); if($('#blogGrid')) filterPage(blogs,'#blogGrid','blog'); }); $('#categoryFilter')?.addEventListener('change',()=>$('#searchInput')?.dispatchEvent(new Event('input'))); }
+function initPremiumPageSuite(){
+  const main = $('#details');
+  const title = $('.hero-command h2')?.textContent?.trim();
+  const config = premiumPageTools[title];
+  if(!main || !config || $('.premium-tool')) return;
+  const section = document.createElement('section');
+  section.className = 'section premium-tool';
+  section.innerHTML = `<div class="container premium-tool-shell glass reveal"><div class="premium-tool-copy"><span class="eyebrow">${config.focus}</span><h2>${title} interactive layer</h2><p class="lead">${config.insight}</p><div class="premium-tool-tabs">${config.tabs.map((tab,index)=>`<button class="premium-tab ${index===0?'active':''}" type="button" data-score="${Math.max(62, config.score - index * 7)}">${tab}</button>`).join('')}</div></div><div class="premium-tool-output"><div class="score-ring" style="--score:${config.score}"><div class="score-ring-inner"><span class="eyebrow">Fit score</span><strong>${config.score}</strong><p class="muted">${config.focus} confidence</p></div></div><div class="tool-metrics">${config.metrics.map(metric=>`<div class="tool-metric"><span>Signal</span><strong>${metric}</strong></div>`).join('')}</div><div class="premium-page-card"><h3>Concierge next step</h3><p class="muted">Save this signal, refine preferences, or move directly into Booking & Invoice with a human-ready brief.</p></div></div></div>`;
+  const after = main.querySelector('.section');
+  after ? after.after(section) : main.prepend(section);
+  $$('.premium-tab', section).forEach(tab => tab.addEventListener('click', () => {
+    $$('.premium-tab', section).forEach(item => item.classList.toggle('active', item === tab));
+    const score = Number(tab.dataset.score);
+    const ring = $('.score-ring', section);
+    ring.style.setProperty('--score', score);
+    $('strong', ring).textContent = score;
+    toast(`${tab.textContent} signal selected`);
+  }));
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-  initShell(); renderAllDynamic(); initWeather(); initWorldMap(); initTestimonials(); initPlanner(); initBudgetCalc(); initBooking(); initCheckout(); initDashboard(); initListingFilters();
+  initShell(); renderAllDynamic(); initWeather(); initWorldMap(); initTestimonials(); initPlanner(); initBudgetCalc(); initBooking(); initCheckout(); initDashboard(); initListingFilters(); initPremiumPageSuite();
   $('#detailModal')?.addEventListener('click', e => { if (e.target.id === 'detailModal') e.currentTarget.classList.remove('show'); });
   $('#flightSearch')?.addEventListener('submit', e => { e.preventDefault(); toast('Flight comparison refreshed with preferred route'); });
 });
